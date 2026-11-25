@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>হিসাব সাথী - OT ও খরচ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f7a5c">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#eef5f1;--card:#fff;--tx:#14261f;--mu:#62766d;--pr:#0f7a5c;--prt:#fff;--bd:#d6e4dc;--ok:#0f7a5c;--bad:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}}
+:root[data-theme="dark"]{--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;padding:14px;max-width:520px;margin:auto;line-height:1.5}
+header{display:flex;align-items:center;gap:10px;margin:4px 0 14px}
+header h1{font-size:1.25rem;margin:0;color:var(--pr);flex:1}
+#back{width:auto;margin:0;padding:6px 12px;background:var(--card);color:var(--pr);border:1px solid var(--bd)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/.78;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:.95rem;text-align:center}
+.tile span{font-size:1.9rem}
+.tile small{font-weight:400;color:var(--mu);font-size:.72rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:1rem;margin:0 0 10px}
+label{display:block;font-size:.85rem;color:var(--mu);margin:8px 0 3px}
+#s-calc label{font-size:1.05rem;font-weight:800;color:var(--tx);letter-spacing:.2px;margin:14px 0 6px;padding-left:9px;border-left:3px solid var(--pr);line-height:1.3}
+.rk{font-size:1.05rem;font-weight:800;color:var(--tx);letter-spacing:.2px}
+#cres .line:not(.tot) b{font-size:1.05rem}
+input,select{width:100%;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:1rem;font-family:inherit}
+.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+button{background:var(--pr);color:var(--prt);border:0;border-radius:10px;padding:11px 14px;font-size:1rem;font-family:inherit;cursor:pointer;margin-top:10px;width:100%}
+button.s{background:transparent;color:var(--bad);width:auto;margin:0;padding:4px 8px}
+button.g{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+#g2b{background:#1e6fd9;color:#fff;border:0}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.it .l{flex:1}.done .l{text-decoration:line-through;color:var(--mu)}
+.line{display:flex;justify-content:space-between;padding:5px 0}
+.tot{font-size:1.25rem;font-weight:700;color:var(--ok);border-top:2px solid var(--bd);margin-top:6px;padding-top:10px}
+.mu{color:var(--mu);font-size:.85rem}
+.bad{color:var(--bad)}.ok{color:var(--ok)}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;width:0;background:var(--pr)}
+.av{width:42px;height:42px;border-radius:50%;background:var(--pr);color:var(--prt);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+body{padding-bottom:96px}
+.mi{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--bd);color:var(--tx);text-decoration:none;cursor:pointer}
+.mi:last-child{border-bottom:0}
+.gh{margin:16px 4px 8px;color:var(--pr);font-size:1rem}
+#dsh th,#dsh td{border-bottom:1px solid var(--bd);padding:8px 4px;text-align:left}
+#nav{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));z-index:10}
+#nav a{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--mu);font-size:.75rem}
+#nav a span{font-size:1.4rem;position:relative}
+#nav a.on{color:var(--pr);font-weight:700}
+#nb{position:absolute;top:-4px;right:-12px;background:var(--bad);color:#fff;border-radius:9px;font-size:.65rem;font-style:normal;padding:0 5px;min-width:16px;line-height:16px}
+#nb[hidden]{display:none}
+#nav a{font-size:.68rem;white-space:nowrap}
+.nt{display:flex;gap:12px;align-items:center;color:var(--tx);text-decoration:none}
+#dlist{padding-bottom:84px}
+#dfab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:18px;font-size:2rem;margin:0;padding:0;box-shadow:0 4px 14px #0004}
+.sheet{position:fixed;inset:0;background:#0007;display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet[hidden]{display:none}
+#ofabw,#dfw{position:sticky;bottom:calc(86px + env(safe-area-inset-bottom,0px));display:flex;justify-content:flex-end;pointer-events:none}
+#ofab,#dadd{width:58px;height:58px;border-radius:50%;font-size:2rem;line-height:1;margin:0;padding:0;box-shadow:0 4px 14px #0004;pointer-events:auto}
+.box{background:var(--card);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+section[hidden]{display:none}
+</style>
+</head>
+<body>
+<header><button id="back" type="button" hidden onclick="goBack()">← ফিরুন</button><h1 id="ttl">📒 হিসাব সাথী - OT ও খরচ</h1></header>
+
+<section id="s-home">
+<div class="grid">
+<a class="tile" href="#overtime"><span>⏱️</span>ওভারটাইম হিসাব<small>OT ঘণ্টা ও বেতন</small></a>
+<a class="tile" href="#plan"><span>💵</span>সঞ্চয় হিসাব<small>সঞ্চয় ও পরিকল্পনা</small></a>
+<a class="tile" href="#expense"><span>🧾</span>প্রতিদিনের খরচ<small>খরচের খাতা</small></a>
+<a class="tile" href="#debt"><span>🤝</span>দেনা পাওনা<small>কার কাছে কত</small></a>
+</div>
+<p class="mu" id="hg" style="text-align:center;margin-top:16px">সব তথ্য আপনার ফোনেই সেভ থাকে</p>
+</section>
+
+<div class="card" id="otbar" hidden><h2>মাস</h2><input type="month" id="month"></div>
+<section id="s-overtime">
+<div class="grid">
+<a class="tile" href="#ot-add"><span>➕</span>ঘণ্টা যোগ<small>আজকের OT লিখুন</small></a>
+<a class="tile" href="#ot-list"><span>📋</span>মাসের তালিকা<small>মাসের সব এন্ট্রি</small></a>
+<a class="tile" href="#ot-report"><span>📊</span>রিপোর্ট<small>মোট বেতনের হিসাব</small></a>
+<a class="tile" href="#ot-others"><span>💵</span><b style="font-size:1.15rem">মূল বেতন এড</b><small>বেতন, বোনাস, বিল</small></a>
+</div>
+</section>
+
+<section id="s-ot-others">
+<div class="card">
+<h2>বেতনের তথ্য</h2>
+<label>মোট বেতন (গ্রস) – টাকা</label><input type="number" id="gross" inputmode="decimal">
+<label>মূল বেতন (বেসিক) – টাকা</label><input type="number" id="basic" inputmode="decimal">
+<button class="g" id="g2b" type="button">গ্রস থেকে বেসিক বের করুন</button>
+<p class="mu" id="gmsg"></p>
+<div class="line"><span>প্রতি ঘণ্টা OT রেট</span><b id="rate">০ ৳</b></div>
+<p class="mu">সূত্র: বেসিক ÷ ২০৮ × ২</p>
+</div>
+<div class="card">
+<h2>বেতন এড</h2>
+<div class="row"><div><label>হাজিরা বোনাস</label><input type="number" id="att" inputmode="decimal"></div><div><label>নাইট বিল</label><input type="number" id="night" inputmode="decimal"></div></div>
+<div class="row"><div><label>টিফিন বিল</label><input type="number" id="tiffin" inputmode="decimal"></div><div><label>কর্তন</label><input type="number" id="ded" inputmode="decimal"></div></div>
+</div>
+<div class="card"><h2>আরও সেটিং</h2><div class="row"><div><label>সাধারণ দিনের OT গুণক</label><input type="number" id="xmx" step="0.5" placeholder="২" inputmode="decimal"></div><div><label>শুক্রবার/ছুটির গুণক</label><input type="number" id="xhx" step="0.5" placeholder="২" inputmode="decimal"></div></div><div class="row"><div><label>অনুপস্থিত দিন (এ মাস)</label><input type="number" id="xab" inputmode="decimal"></div><div><label>অগ্রিম বেতন (এ মাস)</label><input type="number" id="xad" inputmode="decimal"></div></div><p class="mu">অনুপস্থিতির কর্তন = মোট বেতন ÷ ৩০ × দিন। শুক্রবারে ছুটির গুণক ধরা হয়।</p></div></section>
+
+<section id="s-ot-report">
+<div class="card">
+<h2>হিসাব</h2>
+<div class="line"><span>মোট বেতন</span><span id="r1">০ ৳</span></div>
+<div class="line"><span>OT টাকা</span><span id="r2">০ ৳</span></div>
+<div class="line"><span>বোনাস ও বিল</span><span id="r3">০ ৳</span></div>
+<div class="line"><span>কর্তন</span><span id="r4">০ ৳</span></div>
+<div class="line tot"><span>আপনি পাবেন</span><span id="r5">০ ৳</span></div>
+</div>
+<div class="card" id="ocmp"></div><button class="g" id="slipbtn" type="button">📄 বেতন স্লিপ (PDF/প্রিন্ট)</button></section>
+
+<section id="s-ot-add">
+<div class="card">
+<h2>ঘণ্টা যোগ করুন</h2>
+<div class="row"><div><label>তারিখ</label><input type="date" id="d"></div><div><label>OT ঘণ্টা</label><input type="number" id="h" step="0.5" min="0" inputmode="decimal"></div></div>
+<button id="add" type="button">+ যোগ করুন</button>
+<div id="tod"></div>
+<p class="mu" id="addmsg"></p>
+</div>
+</section>
+
+<section id="s-ot-list">
+<div class="card">
+<h2>এই মাসের এন্ট্রি</h2>
+<div id="list"></div>
+<div class="line tot"><span>মোট OT ঘণ্টা</span><b id="th">০</b></div>
+</div>
+<div id="ofabw"><button id="ofab" type="button" aria-label="ঘণ্টা যোগ করুন">+</button></div>
+</section>
+
+<section id="s-calc">
+<div class="card">
+<h2>দ্রুত OT হিসাব</h2>
+<label>কোন বেতন দিবেন?</label><select id="cs"><option value="gross">মূল (মোট) বেতন</option><option value="basic">বেসিক বেতন</option></select>
+<label id="clb">মূল (মোট) বেতন (টাকা)</label><input type="number" id="cb" inputmode="decimal">
+<div class="row"><div><label>মোট OT ঘণ্টা</label><input type="number" id="ch" inputmode="decimal" step="0.5"></div><div><label>হাজিরা বোনাস</label><input type="number" id="cat" inputmode="decimal" placeholder="টাকা"></div></div>
+<label>OT রেটের ধরন</label><select id="cm"><option value="auto">অটো (বেসিক ÷ ২০৮ × ২)</option><option value="custom">নিজের রেট</option></select>
+<div id="cxw" hidden><label>প্রতি ঘণ্টার রেট (টাকা)</label><input type="number" id="cx" inputmode="decimal"></div>
+<button id="cgo" type="button">হিসাব করুন</button>
+</div>
+<div class="card" id="cres" hidden></div>
+<p class="mu" style="text-align:center">হিসাব আনুমানিক। পে-স্লিপের সাথে মিলিয়ে নিন।</p>
+</section>
+
+<section id="s-appinfo">
+<div class="card" style="text-align:center"><span class="av" style="margin:0 auto 8px;width:64px;height:64px;font-size:1.6rem">📒</span><h2 style="margin:0">হিসাব সাথী - OT ও খরচ</h2><p class="mu">Hisab Sathi - OT &amp; Expense<br>সংস্করণ ১.০</p></div>
+<div class="card"><h2>এই অ্যাপে যা আছে</h2>
+<p>⏱️ <b>ওভারটাইম হিসাব:</b> প্রতিদিনের OT, প্রতি ঘণ্টার রেট ও মাসের মোট প্রাপ্য</p>
+<p>🎯 <b>সঞ্চয় হিসাব:</b> মাস শেষের সঞ্চয়ের খাতা ও পরিকল্পনা</p>
+<p>🧾 <b>প্রতিদিনের খরচ:</b> খরচের তালিকা, রিপোর্ট ও মাসিক বাজেট</p>
+<p>🤝 <b>দেনা পাওনা:</b> কার কাছে কত টাকা, সব এক জায়গায়</p></div>
+<div class="card"><h2>জেনে রাখুন</h2>
+<p>• এই অ্যাপের হিসাব আনুমানিক। পে-স্লিপের সাথে মিলিয়ে নিন।</p>
+<p>• এটি কোনো সরকারি অ্যাপ নয়।</p>
+<p>• সব তথ্য শুধু আপনার ফোনে সেভ থাকে, তাই মাঝে মাঝে ব্যাকআপ নিন।</p></div>
+<div class="card">
+<a class="mi" href="#info-tutorial"><span>▶️ কীভাবে ব্যবহার করবেন</span><span>›</span></a>
+<a class="mi" href="#info-privacy"><span>🔒 প্রাইভেসি পলিসি</span><span>›</span></a>
+<a class="mi" href="#info-contact"><span>✉️ যোগাযোগ</span><span>›</span></a>
+</div>
+</section>
+
+<section id="s-profile">
+<div class="card" style="text-align:center"><span class="av" id="pav" style="margin:0 auto 10px;width:68px;height:68px;font-size:1.8rem">👤</span>
+<label>আপনার নাম</label><input id="uname" placeholder="যেমন: রহিম"></div>
+<div class="card">
+<h2>ভাষা</h2>
+<div class="row" style="margin-bottom:6px"><label style="margin:0"><input type="radio" name="lg" checked style="width:auto"> বাংলা</label><label style="margin:0;opacity:.6"><input type="radio" name="lg" disabled style="width:auto"> English (শীঘ্রই)</label></div>
+<div class="mi"><span>🌙 ডার্ক মোড</span><input type="checkbox" id="dm" style="width:auto"></div>
+<a class="mi" href="#ot-sheet"><span>📄 ওভারটাইম ডেটাশিট দেখুন</span><span>›</span></a>
+<a class="mi" href="#backup"><span>💾 ব্যাকআপ ও রিস্টোর</span><span>›</span></a>
+</div>
+<h2 class="gh">ডেটা ম্যানেজমেন্ট</h2>
+<div class="card">
+<div class="mi" id="dall"><span>🗑️ সব তথ্য মুছুন</span><span>›</span></div>
+<div class="mi" id="rbill"><span>🧾 সব বিল রিসেট</span><span>›</span></div>
+</div>
+<h2 class="gh">সাহায্য ও তথ্য</h2>
+<div class="card">
+<a class="mi" href="#info-contact"><span>✉️ যোগাযোগ করুন</span><span>›</span></a>
+<div class="mi" id="shr"><span>🔗 শেয়ার করুন</span><span>›</span></div>
+<div class="mi" id="rtus"><span>⭐ ৫ স্টার রেটিং দিন</span><span>›</span></div>
+<a class="mi" href="#info-tutorial"><span>▶️ কীভাবে ব্যবহার করবেন</span><span>›</span></a>
+<a class="mi" href="#info-privacy"><span>🔒 প্রাইভেসি পলিসি</span><span>›</span></a>
+</div>
+<div class="card mi" id="exit" style="color:var(--bad);border-color:var(--bad);font-weight:700"><span>← বের হন</span><span>›</span></div>
+<p class="mu" id="psm" style="text-align:center"></p>
+</section>
+
+<section id="s-ot-sheet"><div class="card"><h2>ওভারটাইম ডেটাশিট</h2><div style="overflow-x:auto"><table id="dsh" style="width:100%;border-collapse:collapse"></table></div></div></section>
+
+<section id="s-info-contact"><div class="card"><h2>যোগাযোগ</h2><p>আপনার মতামত ও সমস্যা জানাতে ইমেইল বা ফেসবুক পেজের ঠিকানা এখানে যোগ করা হবে।</p></div></section>
+
+<section id="s-info-tutorial"><div class="card"><h2>কীভাবে ব্যবহার করবেন</h2>
+<p>১. <b>ওভারটাইম হিসাব</b>: বেতন এডে গ্রস ও বেসিক বেতন দিন, তারপর প্রতিদিনের OT ঘণ্টা যোগ করুন। রিপোর্টে মোট প্রাপ্য দেখুন।</p>
+<p>২. <b>সঞ্চয় হিসাব</b>: মাস শেষে কত সঞ্চয় করলেন সঞ্চয়ের খাতায় লিখুন, আর নতুন পরিকল্পনা যোগ করুন।</p>
+<p>৩. <b>প্রতিদিনের খরচ</b>: খরচ লিখুন ও মাসের বাজেট সেট করুন।</p>
+<p>৪. <b>দেনা পাওনা</b>: ব্যক্তি যোগ করে "আমি দিলাম" বা "আমি পেলাম" লিখুন।</p>
+<p>৫. মাঝে মাঝে ব্যাকআপ নিয়ে রাখুন: প্রোফাইল → ব্যাকআপ ও রিস্টোর।</p></div></section>
+
+<section id="s-info-privacy"><div class="card"><h2>প্রাইভেসি পলিসি</h2><p>আপনার সব তথ্য (বেতন, খরচ, সঞ্চয়, দেনা পাওনা, নাম, মোবাইল) শুধু আপনার ফোনে সেভ থাকে। এই অ্যাপ কোনো তথ্য সার্ভারে পাঠায় না, বিক্রি বা শেয়ার করে না।</p><p>ব্যাকআপ কোড আপনি নিজে তৈরি করেন ও নিজের কাছে রাখেন। তথ্য মুছলে বা ফোন বদলালে ব্যাকআপ ছাড়া ফেরত আনা যাবে না।</p></div></section>
+
+<section id="s-backup">
+<div class="card">
+<h2>ব্যাকআপ নিন</h2>
+<p class="mu">বাটনে চাপলে আপনার সব তথ্যের একটি কোড তৈরি হবে। কোডটি কপি করে হোয়াটসঅ্যাপ, নোট বা জিমেইলে নিজেকে পাঠিয়ে রাখুন।</p>
+<button id="bmk" type="button">ব্যাকআপ কোড তৈরি করুন</button>
+</div>
+<div class="card">
+<h2>কোড / ফেরত আনুন</h2>
+<p class="mu">ব্যাকআপ কোড এখানে পেস্ট করে "ফেরত আনুন" চাপুন। এতে বর্তমান সব তথ্য বদলে যাবে।</p>
+<textarea id="bt" rows="6" style="width:100%;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:.85rem"></textarea>
+<div class="row"><button id="bcp" type="button" class="g">কপি করুন</button><button class="g" id="bcsv" type="button">📊 Excel/CSV এক্সপোর্ট</button><button id="brs" type="button">ফেরত আনুন</button></div>
+<p class="mu" id="kmsg"></p>
+</div>
+</section>
+
+<section id="s-plan">
+<div class="grid">
+<a class="tile" href="#pl-save"><span>💰</span>সঞ্চয় যোগ<small>এই মাসের সঞ্চয় লিখুন</small></a>
+<a class="tile" href="#pl-book"><span>📒</span>সঞ্চয়ের খাতা<small>মাসভিত্তিক হিসাব ও মোট</small></a>
+<a class="tile" href="#pl-new"><span>📝</span>নতুন পরিকল্পনা<small>কাজ ও লক্ষ্য লিখুন</small></a>
+</div>
+</section>
+
+<section id="s-pl-save">
+<div class="card">
+<h2>এই মাসে কত সঞ্চয় করলাম?</h2>
+<label>মাস</label><input type="month" id="sd">
+<label>সঞ্চয়ের পরিমাণ (টাকা)</label><input type="number" id="sa" inputmode="decimal">
+<label>নোট (ঐচ্ছিক)</label><input type="text" id="sn" placeholder="যেমন: ব্যাংকে জমা, ডিপিএস, ব্যক্তি">
+<button id="sin" type="button">খাতায় লিখুন</button>
+<p class="mu" id="smsg"></p>
+</div>
+<div class="card">
+<h2>সঞ্চয়ের লক্ষ্য</h2>
+<label>কত টাকা সঞ্চয় করতে চান?</label><input type="number" id="sg" inputmode="decimal">
+</div>
+</section>
+
+<section id="s-pl-book">
+<div class="card">
+<div class="line tot"><span>মোট সঞ্চয়</span><b id="sv">০ ৳</b></div>
+<div class="bar"><i id="svb"></i></div>
+<div class="line"><span>লক্ষ্য</span><b id="svg">—</b></div>
+<div class="line"><span>মাসিক গড় সঞ্চয়</span><b id="savg">০ ৳</b></div>
+</div>
+<div class="card"><h2>📒 সঞ্চয়ের খাতা</h2><div id="slist"></div></div>
+</section>
+
+<section id="s-pl-new">
+<div class="card">
+<h2>নতুন পরিকল্পনা</h2>
+<label>কী করতে চান?</label><input type="text" id="pt" placeholder="যেমন: নতুন ফোন কেনা, বাড়ি যাওয়া">
+<label>তারিখ (ঐচ্ছিক)</label><input type="date" id="pd">
+<button id="padd" type="button">+ যোগ করুন</button>
+</div>
+<div class="card"><h2>আমার তালিকা</h2><div id="plist"></div></div>
+</section>
+
+<section id="s-expense">
+<div class="grid">
+<a class="tile" href="#ex-add"><span>💸</span>আজকের খরচ<small>নতুন খরচ লিখুন</small></a>
+<a class="tile" href="#ex-list"><span>🗒️</span>খরচের তালিকা<small>সব খরচ এক নজরে</small></a>
+<a class="tile" href="#ex-report"><span>📈</span>খরচের রিপোর্ট<small>আজ, সপ্তাহ, মাস</small></a>
+<a class="tile" href="#ex-budget"><span>👛</span>বাজেট<small>মাসে কত খরচ করবেন</small></a>
+</div>
+</section>
+
+<section id="s-ex-add">
+<div class="card">
+<h2>আজকের খরচ লিখুন</h2>
+<div class="row"><div><label>টাকা</label><input type="number" id="ea" inputmode="decimal"></div><div><label>তারিখ</label><input type="date" id="ed"></div></div>
+<label>কীসের খরচ?</label><input type="text" id="en" placeholder="যেমন: বাজার, ভাড়া, যাতায়াত">
+<label>খাত</label><select id="ecat"></select>
+<button id="eadd" type="button">+ যোগ করুন</button>
+</div>
+<div class="card">
+<div class="line"><span>আজকের মোট খরচ</span><b id="et">০ ৳</b></div>
+</div>
+<a class="card mi" href="#rec"><span>🔁 নিয়মিত খরচ ও রিমাইন্ডার</span><span>›</span></a></section>
+
+<section id="s-ex-list">
+<div class="card"><h2>সাম্প্রতিক খরচ</h2><div id="elist"></div></div>
+</section>
+
+<section id="s-ex-report">
+<div class="card">
+<h2>খরচের রিপোর্ট</h2>
+<div class="line"><span>গত ৭ দিনের খরচ</span><b id="e7">০ ৳</b></div>
+<div class="line"><span>এই মাসের খরচ</span><b id="em">০ ৳</b></div>
+<div class="line"><span>এই মাসে এন্ট্রি</span><b id="ec">০</b></div>
+<div class="line"><span>সবচেয়ে বড় খরচ</span><b id="emax">—</b></div>
+<div class="line"><span>মাসের বাজেট</span><b id="eb">—</b></div>
+<div class="line tot"><span>বাজেটের বাকি</span><span id="er">—</span></div>
+</div>
+<div class="card"><h2>খাত অনুযায়ী (এই মাস)</h2><div id="pie"></div></div><div class="card" id="xcmp"></div></section>
+
+<section id="s-ex-budget">
+<div class="card">
+<h2>মাসের বাজেট</h2>
+<label>এই মাসে কত টাকা খরচ করতে চান?</label><input type="number" id="bi" inputmode="decimal">
+<button id="bsave" type="button">সেভ করুন</button>
+<p class="mu" id="bmsg"></p>
+</div>
+</section>
+
+<section id="s-debt">
+<div class="grid">
+<a class="tile" href="#db-new"><span>➕</span>দেনা পাওনা<small>নতুন ব্যক্তি যোগ করুন</small></a>
+<a class="tile" href="#db-list"><span>🗒️</span>দেনা পাওনা তালিকা<small>কার কাছে কত</small></a>
+</div>
+</section>
+
+<section id="s-db-list">
+<div class="card" style="display:flex;text-align:center">
+<div style="flex:1"><div class="mu">আমি পাবো</div><b class="ok" id="dg">০ ৳</b></div>
+<div style="flex:1"><div class="mu">আমি দিবো</div><b class="bad" id="do">০ ৳</b></div>
+<div style="flex:1"><div class="mu">লেনদেন</div><b id="dc">০ জন</b></div>
+</div>
+<input type="search" id="dq" placeholder="নাম বা মোবাইল দিয়ে খুঁজুন...">
+<div class="row" style="margin:8px 0 12px"><select id="df"><option value="all">সবাই</option><option value="get">আমি পাবো</option><option value="owe">আমি দিবো</option></select><select id="dso"><option value="new">সাম্প্রতিক</option><option value="name">নাম অনুযায়ী</option><option value="amt">বেশি টাকা আগে</option></select></div>
+<div id="dlist"></div>
+<div id="dfw"><button id="dadd" type="button" aria-label="নতুন ব্যক্তি যোগ করুন">+</button></div>
+</section>
+
+<section id="s-db-new">
+<div class="card">
+<h2>নতুন ব্যক্তি</h2>
+<label>নাম *</label><input id="pn">
+<div class="row"><div><label>মোবাইল</label><input id="pm" type="tel" inputmode="tel"></div><div><label>সম্পর্ক</label><input id="pr" placeholder="যেমন: বন্ধু"></div></div>
+<label>ঠিকানা</label><input id="pa">
+<button id="psave" type="button">সেভ করুন</button>
+<p class="mu">সেভ করলেই লেনদেন লেখার পেজ খুলবে</p>
+</div>
+</section>
+
+<nav id="nav"><a href="#home" id="n-home"><span>🏠</span>হোম</a><a href="#ot-list" id="n-list"><span>📋</span>তালিকা</a><a href="#calc" id="n-calc"><span>🧮</span>ক্যালকুলেটর</a><a href="#appinfo" id="n-info"><span>ℹ️</span>তথ্য</a><a href="#profile" id="n-profile"><span>👤</span>প্রোফাইল</a></nav>
+
+<div class="sheet" id="shQ" hidden><div class="box">
+<h2>➕ নতুন ব্যক্তি</h2>
+<label>নাম *</label><input id="qn">
+<div class="row"><div><label>মোবাইল</label><input id="qm" type="tel" inputmode="tel"></div><div><label>সম্পর্ক</label><input id="qr" placeholder="যেমন: বন্ধু"></div></div>
+<label>ঠিকানা</label><input id="qa">
+<div class="row"><button id="qcl" type="button" class="g">বন্ধ করুন</button><button id="qsv" type="button">সেভ করুন</button></div>
+<p class="mu" id="qmsg"></p>
+</div></div>
+
+<div class="sheet" id="shO" hidden><div class="box">
+<h2>➕ ঘণ্টা যোগ করুন</h2>
+<div class="row"><div><label>তারিখ</label><input type="date" id="od"></div><div><label>OT ঘণ্টা</label><input type="number" id="oh" step="0.5" min="0" inputmode="decimal"></div></div>
+<div class="row"><button id="ocl" type="button" class="g">বন্ধ করুন</button><button id="osave" type="button">+ যোগ করুন</button></div>
+<p class="mu" id="omsg"></p>
+</div></div>
+
+<div class="sheet" id="shT" hidden><div class="box">
+<h2 id="tn"></h2><p class="mu" id="ti"></p>
+<div class="line tot"><span id="tl"></span><b id="tb"></b></div>
+<div class="row"><div><label>টাকা</label><input type="number" id="ta" inputmode="decimal"></div><div><label>বিবরণ</label><input id="tt"></div></div>
+<div class="row"><button id="tg" type="button">আমি দিলাম</button><button id="tr" type="button" class="g">আমি পেলাম</button></div>
+<div id="th2" style="margin-top:10px"></div>
+<label>পরিশোধের তারিখ (ঐচ্ছিক)</label><input type="date" id="tdue"><div class="row" id="tpush" style="margin:8px 0"><a id="twa" target="_blank" rel="noopener" class="mi card" style="margin:0;justify-content:center">💬 WhatsApp তাগাদা</a><a id="tsm" class="mi card" style="margin:0;justify-content:center">✉️ SMS তাগাদা</a></div><div class="row"><button class="g" id="tdel" type="button" style="color:var(--bad);border-color:var(--bad)">ব্যক্তিকে মুছুন</button><button class="g" id="tclose" type="button">বন্ধ করুন</button></div>
+</div></div>
+
+<section id="s-rec"><div class="card"><h2>🔁 নিয়মিত খরচ</h2><label>নাম</label><input id="rn" placeholder="যেমন: বাড়ি ভাড়া"><div class="row"><div><label>টাকা</label><input id="ra" type="number" inputmode="decimal"></div><div><label>প্রতি মাসের তারিখ</label><input id="rd" type="number" min="1" max="31" inputmode="numeric"></div></div><label>খাত</label><select id="rc"></select><button id="radd" type="button">+ যোগ করুন</button><p class="mu">তারিখের ২ দিন আগে থেকে নোটিফিকেশনে দেখাবে</p></div><div id="rlist"></div></section>
+<script>
+const $=id=>document.getElementById(id);
+const bn=n=>(Math.round(n*100)/100).toLocaleString('bn-BD');
+const money=n=>bn(n)+' ৳';
+const v=id=>parseFloat($(id).value)||0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dfmt=d=>d?new Date(d).toLocaleDateString('bn-BD',{day:'numeric',month:'long'}):'';
+let S={};
+try{S=JSON.parse(localStorage.getItem('otbd')||'')||{}}catch(e){}
+S.settings=S.settings||{};S.months=S.months||{};S.plan=S.plan||[];S.exp=S.exp||[];S.debt=S.debt||[];S.save=S.save||[];
+const save=()=>{try{localStorage.setItem('otbd',JSON.stringify(S))}catch(e){}};
+const now=new Date(),lt=now-now.getTimezoneOffset()*6e4,today=new Date(lt).toISOString().slice(0,10),wk=new Date(lt-6*864e5).toISOString().slice(0,10);
+['d','ed'].forEach(i=>$(i).value=today);$('sd').value=today.slice(0,7);
+$('month').value=today.slice(0,7);
+
+/* navigation */
+const T={home:'📒 হিসাব সাথী - OT ও খরচ',overtime:'⏱️ ওভারটাইম হিসাব',plan:'💵 সঞ্চয় হিসাব',expense:'🧾 প্রতিদিনের খরচ',debt:'🤝 দেনা পাওনা','ot-add':'➕ ঘণ্টা যোগ','ot-list':'📋 মাসের তালিকা','ot-report':'📊 রিপোর্ট','ot-others':'💼 বেতন এড','ex-add':'💸 আজকের খরচ','ex-list':'🗒️ খরচের তালিকা','ex-report':'📈 খরচের রিপোর্ট','ex-budget':'👛 বাজেট','pl-save':'💰 সঞ্চয় যোগ','pl-book':'📒 সঞ্চয়ের খাতা','pl-new':'📝 নতুন পরিকল্পনা','db-new':'🤝 দেনা পাওনা','db-list':'🗒️ দেনা পাওনা তালিকা',backup:'💾 ব্যাকআপ ও রিস্টোর',calc:'🧮 ক্যালকুলেটর',appinfo:'ℹ️ অ্যাপের তথ্য',profile:'👤 প্রোফাইল','ot-sheet':'📄 ওভারটাইম ডেটাশিট','info-contact':'✉️ যোগাযোগ','info-tutorial':'▶️ কীভাবে ব্যবহার করবেন','info-privacy':'🔒 প্রাইভেসি পলিসি'};
+function goBack(){const h=location.hash.slice(1);location.hash=(h==='ot-sheet'||h.startsWith('info-'))?'profile':h.startsWith('ot-')?'overtime':h.startsWith('ex-')?'expense':h.startsWith('pl-')?'plan':h.startsWith('db-')?'debt':h==='backup'?'profile':''}
+function route(){
+ let h=location.hash.slice(1);if(!T[h])h='home';
+ document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=='s-'+h);
+ $('back').hidden=['home','calc','appinfo','profile'].includes(h);$('otbar').hidden=!h.startsWith('ot-');$('ttl').textContent=T[h];window.scrollTo(0,0);
+ const nk=h==='ot-list'?'list':h==='calc'?'calc':h==='appinfo'?'info':(h==='profile'||h==='backup'||h==='ot-sheet'||h.startsWith('info-'))?'profile':'home';['home','list','calc','info','profile'].forEach(k=>$('n-'+k).classList.toggle('on',k===nk));renderProfile();
+}
+addEventListener('hashchange',route);
+
+/* overtime */
+const F=['gross','basic','att','night','tiffin','ded'];
+const M=()=>{const k=$('month').value;return S.months[k]=S.months[k]||{entries:[],extra:{}}};
+function loadOT(){
+ F.slice(0,2).forEach(f=>$(f).value=S.settings[f]??'');
+ const m=M();F.slice(2).forEach(f=>$(f).value=m.extra[f]??'');renderOT();
+}
+function renderToday(){const tm=S.months[today.slice(0,7)],L=tm?tm.entries.filter(e=>e.d===today):[],s=L.reduce((a,e)=>a+e.h,0);
+ $('tod').innerHTML='<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:6px">'+(L.length?`<div class="line"><span class="rk">আজকের OT</span><b>${bn(s)} ঘণ্টা</b></div>`:'<p class="mu">আজ এখনও কোনো OT যোগ হয়নি</p>')+'</div>'}
+function renderOT(){
+ const m=M();m.entries.sort((a,b)=>a.d.localeCompare(b.d));
+ $('list').innerHTML=m.entries.map((e,i)=>`<div class="it"><span class="l">${dfmt(e.d)} — ${bn(e.h)} ঘণ্টা</span><button class="s" data-i="${i}">মুছুন</button></div>`).join('')||'<p class="mu">এখনও কোনো এন্ট্রি নেই</p>';
+ const th=m.entries.reduce((a,e)=>a+e.h,0),rate=v('basic')/208*2,ot=th*rate,ex=v('att')+v('night')+v('tiffin');
+ $('th').textContent=bn(th);$('rate').textContent=money(rate);renderToday();
+ $('r1').textContent=money(v('gross'));$('r2').textContent=money(ot);$('r3').textContent=money(ex);$('r4').textContent=money(v('ded'));
+ $('r5').textContent=money(v('gross')+ot+ex-v('ded'));
+ $('dsh').innerHTML='<tr><th>তারিখ</th><th>বার</th><th>ঘণ্টা</th><th>টাকা</th></tr>'+m.entries.map(e=>`<tr><td>${dfmt(e.d)}</td><td>${new Date(e.d).toLocaleDateString('bn-BD',{weekday:'short'})}</td><td>${bn(e.h)}</td><td>${money(e.h*rate)}</td></tr>`).join('')+`<tr><th colspan="2">মোট</th><th>${bn(th)}</th><th>${money(ot)}</th></tr>`;
+}
+F.forEach(f=>$(f).addEventListener('input',()=>{
+ if(f==='gross'||f==='basic')S.settings[f]=$(f).value;else M().extra[f]=$(f).value;save();renderOT();
+}));
+$('month').addEventListener('change',loadOT);
+$('g2b').onclick=()=>{
+ const g=v('gross');if(!g){$('gmsg').textContent='আগে মোট বেতন লিখুন';return}
+ const b=Math.round((g-2450)/1.5);$('basic').value=b;S.settings.basic=String(b);save();renderOT();
+ $('gmsg').textContent='বেসিক = (গ্রস − ২৪৫০) ÷ ১.৫ ধরা হয়েছে। পে-স্লিপের সাথে মিলিয়ে নিন।';
+};
+$('add').onclick=()=>{const h=v('h');if(!$('d').value||h<=0)return;M().entries.push({d:$('d').value,h});$('h').value='';save();renderOT();$('addmsg').innerHTML='✓ যোগ হয়েছে। মোট '+$('th').textContent+' ঘণ্টা। OT বিবরণ দেখতে <a href="#ot-list" style="color:var(--pr);font-weight:700">মাসের তালিকা</a> দেখুন।'};
+$('list').onclick=e=>{const i=e.target.dataset.i;if(i===undefined)return;M().entries.splice(+i,1);save();renderOT()};
+$('ofab').onclick=()=>{$('od').value=today;$('oh').value='';$('omsg').textContent='';$('shO').hidden=false;setTimeout(()=>$('oh').focus(),60)};
+$('ocl').onclick=()=>{$('shO').hidden=true};
+$('shO').onclick=e=>{if(e.target===$('shO'))$('shO').hidden=true};
+$('osave').onclick=()=>{const h=v('oh');if(!$('od').value||h<=0){$('omsg').textContent='তারিখ ও ঘণ্টা লিখুন';return}M().entries.push({d:$('od').value,h});save();renderOT();$('shO').hidden=true};
+
+/* plan */
+function renderPlan(){
+ $('plist').innerHTML=S.plan.map((p,i)=>`<div class="it ${p.done?'done':''}"><input type="checkbox" style="width:auto" data-c="${i}" ${p.done?'checked':''}><span class="l">${esc(p.t)}${p.d?`<br><small class="mu">${dfmt(p.d)}</small>`:''}</span><button class="s" data-x="${i}">মুছুন</button></div>`).join('')||'<p class="mu">কোনো পরিকল্পনা নেই</p>';
+}
+$('padd').onclick=()=>{const t=$('pt').value.trim();if(!t)return;S.plan.push({t,d:$('pd').value,done:false});$('pt').value='';save();renderPlan()};
+$('plist').onclick=e=>{const t=e.target.dataset;
+ if(t.c!==undefined)S.plan[+t.c].done=e.target.checked;
+ else if(t.x!==undefined)S.plan.splice(+t.x,1);else return;save();renderPlan()};
+
+/* expense */
+function renderExp(){
+ const mo=today.slice(0,7);
+ const sum=a=>a.reduce((s,x)=>s+x.a,0),ms=S.exp.filter(x=>x.d.startsWith(mo)),mt=sum(ms),b=parseFloat(S.settings.budget)||0;
+ $('et').textContent=money(sum(S.exp.filter(x=>x.d===today)));
+ $('e7').textContent=money(sum(S.exp.filter(x=>x.d>=wk&&x.d<=today)));
+ $('em').textContent=money(mt);$('ec').textContent=bn(ms.length);
+ const mx=ms.reduce((m,x)=>x.a>m.a?x:m,{a:0});$('emax').textContent=mx.a?money(mx.a)+(mx.n?' ('+mx.n+')':''):'—';
+ $('eb').textContent=b?money(b):'দেওয়া হয়নি';
+ $('er').textContent=b?money(b-mt):'—';$('er').className=b&&b-mt<0?'bad':'ok';
+ $('bmsg').textContent=b?'এ মাসে খরচ হয়েছে '+money(mt)+', বাকি '+money(b-mt):'';
+ const L=S.exp.map((x,i)=>({...x,i})).sort((a,b)=>b.d.localeCompare(a.d)).slice(0,30);
+ $('elist').innerHTML=L.map(x=>`<div class="it"><span class="l">${esc(x.n||'খরচ')}<br><small class="mu">${dfmt(x.d)}</small></span><b>${money(x.a)}</b><button class="s" data-x="${x.i}">মুছুন</button></div>`).join('')||'<p class="mu">কোনো খরচ নেই</p>';
+}
+$('eadd').onclick=()=>{const a=v('ea');if(a<=0||!$('ed').value)return;S.exp.push({a,n:$('en').value.trim(),d:$('ed').value});$('ea').value='';$('en').value='';save();renderExp()};
+$('elist').onclick=e=>{const i=e.target.dataset.x;if(i===undefined)return;S.exp.splice(+i,1);save();renderExp()};
+
+$('bi').value=S.settings.budget??'';
+$('bsave').onclick=()=>{S.settings.budget=$('bi').value;save();renderExp()};
+
+/* savings */
+function renderSave(){
+ const sv=S.save.reduce((s,x)=>s+(x.t==='in'?x.a:-x.a),0),g=parseFloat(S.settings.goal)||0,p=g?Math.max(0,Math.min(100,sv/g*100)):0;
+ $('sv').textContent=(sv<0?'−':'')+money(Math.abs(sv));
+ $('svg').textContent=g?money(g)+' ('+bn(p)+'%)':'—';
+ $('svb').style.width=p+'%';
+ const mm={};S.save.forEach(x=>{const k=x.d.slice(0,7),o=mm[k]=mm[k]||{k,a:0,n:''};o.a+=x.t==='in'?x.a:-x.a;if(x.n)o.n=x.n});
+ const L=Object.values(mm).sort((a,b)=>b.k.localeCompare(a.k));
+ $('savg').textContent=money(L.length?sv/L.length:0);
+ $('slist').innerHTML=L.map(x=>`<div class="it"><span class="l">${new Date(x.k+'-01').toLocaleDateString('bn-BD',{month:'long',year:'numeric'})}${x.n?`<br><small class="mu">${esc(x.n)}</small>`:''}</span><b class="${x.a>=0?'ok':'bad'}">${money(x.a)}</b><button class="s" data-m="${x.k}">মুছুন</button></div>`).join('')||'<p class="mu">খাতায় এখনও কিছু লেখা হয়নি</p>';
+}
+$('sin').onclick=()=>{const a=v('sa'),m=$('sd').value;if(a<=0||!m){$('smsg').textContent='মাস ও সঞ্চয়ের পরিমাণ লিখুন';return}
+ S.save=S.save.filter(x=>x.d.slice(0,7)!==m);S.save.push({a,t:'in',n:$('sn').value.trim(),d:m+'-01'});
+ $('sa').value='';$('sn').value='';save();renderSave();$('smsg').textContent='✓ খাতায় লেখা হয়েছে। একই মাসে আবার লিখলে আগের অঙ্ক বদলে যাবে।'};
+$('sg').value=S.settings.goal??'';
+$('sg').addEventListener('input',()=>{S.settings.goal=$('sg').value;save();renderSave()});
+$('slist').onclick=e=>{const m=e.target.dataset.m;if(m===undefined)return;S.save=S.save.filter(x=>x.d.slice(0,7)!==m);save();renderSave()};
+
+/* debt */
+S.ppl=S.ppl||[];
+if(S.debt.length){const m={};S.debt.forEach(x=>{if(x.done)return;let p=m[x.p];if(!p){p=m[x.p]={id:Date.now()+S.ppl.length,n:x.p,m:'',r:'',a:'',tx:[]};S.ppl.push(p)}p.tx.push({a:x.a,t:x.t==='get'?'g':'r',n:'',d:today})});S.debt=[];save()}
+let cur=null;
+const bal=p=>p.tx.reduce((s,x)=>s+(x.t==='g'?x.a:-x.a),0);
+function renderDebt(){
+ const q=$('dq').value.trim().toLowerCase(),f=$('df').value,so=$('dso').value;
+ let g=0,o=0,c=0;S.ppl.forEach(p=>{const b=bal(p);if(b>0)g+=b;else o-=b;if(p.tx.length)c++});
+ $('dg').textContent=money(g);$('do').textContent=money(o);$('dc').textContent=bn(c)+' জন';
+ const L=S.ppl.filter(p=>(!q||(p.n+' '+p.m).toLowerCase().includes(q))&&(f==='all'||(f==='get'?bal(p)>0:bal(p)<0)));
+ if(so==='name')L.sort((a,b)=>a.n.localeCompare(b.n,'bn'));else if(so==='amt')L.sort((a,b)=>Math.abs(bal(b))-Math.abs(bal(a)));else L.reverse();
+ $('dlist').innerHTML=L.map(p=>{const b=bal(p);return `<div class="card pp" data-id="${p.id}" style="display:flex;align-items:center;gap:12px;cursor:pointer"><span class="av">${esc(p.n.charAt(0))}</span><span style="flex:1"><b>${esc(p.n)}</b><br><small class="mu">${esc(p.r||p.m||'')}</small></span><span class="${b>0?'ok':b<0?'bad':'mu'}" style="text-align:right"><b>${money(Math.abs(b))}</b><br><small>${b>0?'পাবো':b<0?'দিবো':'মিটেছে'}</small></span></div>`}).join('')||'<p class="mu" style="text-align:center;margin-top:30px">কেউ নেই। নিচের + বাটনে চাপুন</p>';
+}
+function openT(id){cur=S.ppl.find(p=>p.id===id);if(!cur)return;$('tdel').dataset.s='';$('tdel').textContent='ব্যক্তিকে মুছুন';$('shT').hidden=false;renderT()}
+function renderT(){
+ const p=cur,b=bal(p);
+ $('tn').textContent=p.n;$('ti').innerHTML=[esc(p.r),p.m&&`<a href="tel:${esc(p.m)}">${esc(p.m)}</a>`,esc(p.a)].filter(Boolean).join(' · ');
+ $('tl').textContent=b>0?'আমি পাবো':b<0?'আমি দিবো':'হিসাব মিটেছে';$('tb').textContent=money(Math.abs(b));$('tb').className=b<0?'bad':'ok';
+ $('th2').innerHTML=p.tx.map((x,i)=>({x,i})).reverse().map(({x,i})=>`<div class="it"><span class="l">${x.t==='g'?'আমি দিলাম':'আমি পেলাম'}${x.n?' — '+esc(x.n):''}<br><small class="mu">${dfmt(x.d)}</small></span><b>${money(x.a)}</b><button class="s" data-i="${i}">✕</button></div>`).join('')||'<p class="mu">কোনো লেনদেন নেই</p>';
+}
+function addT(t){const a=v('ta');if(a<=0||!cur)return;cur.tx.push({a,t,n:$('tt').value.trim(),d:today});$('ta').value='';$('tt').value='';save();renderT();renderDebt()}
+$('tg').onclick=()=>addT('g');$('tr').onclick=()=>addT('r');
+$('th2').onclick=e=>{const i=e.target.dataset.i;if(i===undefined||!cur)return;cur.tx.splice(+i,1);save();renderT();renderDebt()};
+$('tclose').onclick=()=>{$('shT').hidden=true;cur=null};
+$('tdel').onclick=()=>{if(!cur)return;const b=$('tdel');if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='নিশ্চিত? আবার চাপুন';return}
+ S.ppl=S.ppl.filter(p=>p!==cur);cur=null;$('shT').hidden=true;save();renderDebt()};
+$('dlist').onclick=e=>{const c=e.target.closest('.pp');if(c)openT(+c.dataset.id)};
+['dq','df','dso'].forEach(i=>$(i).addEventListener('input',renderDebt));
+$('psave').onclick=()=>{const n=$('pn').value.trim();if(!n)return;const p={id:Date.now(),n,m:$('pm').value.trim(),r:$('pr').value.trim(),a:$('pa').value.trim(),tx:[]};S.ppl.push(p);save();['pn','pm','pr','pa'].forEach(i=>$(i).value='');renderDebt();location.hash='db-list';openT(p.id)};
+$('dadd').onclick=()=>{['qn','qm','qr','qa'].forEach(i=>$(i).value='');$('qmsg').textContent='';$('shQ').hidden=false;setTimeout(()=>$('qn').focus(),60)};
+$('qcl').onclick=()=>{$('shQ').hidden=true};
+$('shQ').onclick=e=>{if(e.target===$('shQ'))$('shQ').hidden=true};
+$('qsv').onclick=()=>{const n=$('qn').value.trim();if(!n){$('qmsg').textContent='নাম লিখুন';return}const p={id:Date.now(),n,m:$('qm').value.trim(),r:$('qr').value.trim(),a:$('qa').value.trim(),tx:[]};S.ppl.push(p);save();renderDebt();$('shQ').hidden=true;openT(p.id)};
+
+$('bmk').onclick=()=>{$('bt').value='MYBD1:'+JSON.stringify(S);$('bt').select();$('kmsg').textContent='✓ কোড তৈরি হয়েছে। "কপি করুন" চাপুন, তারপর কোডটি নিজেকে পাঠিয়ে রাখুন।'};
+$('bcp').onclick=()=>{const t=$('bt');if(!t.value)return;t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}
+ $('kmsg').textContent=ok?'✓ কপি হয়েছে':'কপি হয়নি। ঘরের লেখা চেপে ধরে সব সিলেক্ট করে কপি করুন'};
+$('brs').onclick=()=>{
+ const b=$('brs');let o;
+ try{const t=$('bt').value.trim();if(!t.startsWith('MYBD1:'))throw 0;o=JSON.parse(t.slice(6));if(!o||typeof o!=='object')throw 0}catch(e){$('kmsg').textContent='কোডটি সঠিক নয়। পুরো কোড পেস্ট করেছেন কি?';return}
+ if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='নিশ্চিত? আবার চাপুন';$('kmsg').textContent='সতর্কতা: এখনকার সব তথ্য এই ব্যাকআপ দিয়ে বদলে যাবে';return}
+ b.dataset.s='';b.textContent='ফেরত আনুন';
+ S=o;['settings','months'].forEach(k=>S[k]=S[k]||{});['plan','exp','debt','save','ppl'].forEach(k=>S[k]=S[k]||[]);save();
+ $('bi').value=S.settings.budget??'';$('sg').value=S.settings.goal??'';
+ loadOT();renderPlan();renderExp();renderSave();renderDebt();$('bt').value='';$('kmsg').textContent='✓ তথ্য ফেরত এসেছে'};
+
+function renderNotify(){
+ const mo=today.slice(0,7),N=[];
+ const mt=S.exp.filter(x=>x.d.startsWith(mo)).reduce((s,x)=>s+x.a,0),bg=parseFloat(S.settings.budget)||0;
+ if(bg&&mt>=bg)N.push(['🎯','বাজেট শেষ! এই মাসে '+money(mt)+' খরচ হয়েছে, বাজেট '+money(bg),'#ex-budget']);
+ else if(bg&&mt>=bg*.8)N.push(['🎯','বাজেটের '+bn(Math.round(mt/bg*100))+'% খরচ হয়ে গেছে। বাকি '+money(bg-mt),'#ex-budget']);
+ S.plan.filter(p=>!p.done&&p.d&&p.d<=today).forEach(p=>N.push(['📝',(p.d===today?'আজকের পরিকল্পনা: ':'সময় পেরিয়েছে: ')+p.t,'#pl-new']));
+ if(now.getDate()>=25&&!S.save.some(x=>x.d.startsWith(mo)))N.push(['💰','মাস প্রায় শেষ। এই মাসের সঞ্চয় খাতায় লিখুন','#pl-save']);
+ S.ppl.filter(p=>bal(p)>0).sort((a,b)=>bal(b)-bal(a)).slice(0,5).forEach(p=>N.push(['🤝',p.n+' এর কাছে আপনার পাওনা '+money(bal(p)),'#db-list']));
+ S.ppl.filter(p=>bal(p)<0).slice(0,5).forEach(p=>N.push(['🤝',p.n+' কে আপনার দেওয়ার আছে '+money(-bal(p)),'#db-list']));
+ $('nlist').innerHTML=N.map(n=>`<a class="card nt" href="${n[2]}"><span style="font-size:1.5rem">${n[0]}</span><span>${esc(n[1])}</span></a>`).join('')||'<p class="mu" style="text-align:center;margin-top:30px">কোনো নোটিফিকেশন নেই 🎉</p>';
+ $('nb').textContent=N.length;$('nb').hidden=!N.length;
+}
+function renderProfile(){const n=(S.settings.name||'').trim();$('pav').textContent=n?n.charAt(0):'👤';$('hg').textContent=n?'স্বাগতম, '+n:'সব তথ্য আপনার ফোনেই সেভ থাকে'}
+$('uname').value=S.settings.name??'';
+$('uname').addEventListener('input',()=>{S.settings.name=$('uname').value;save();renderProfile()});
+
+function applyTheme(){const t=S.settings.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;$('dm').checked=t==='dark'}
+$('dm').onchange=()=>{S.settings.theme=$('dm').checked?'dark':'light';save();applyTheme()};
+function refreshAll(){['settings','months'].forEach(k=>S[k]=S[k]||{});['plan','exp','debt','save','ppl'].forEach(k=>S[k]=S[k]||[]);save();$('bi').value=S.settings.budget??'';$('sg').value=S.settings.goal??'';$('uname').value=S.settings.name??'';applyTheme();loadOT();renderPlan();renderExp();renderSave();renderDebt();route()}
+function twoTap(id,label,fn){const el=$(id),sp=el.firstElementChild;el.onclick=()=>{if(el.dataset.s!=='1'){el.dataset.s='1';sp.textContent='⚠️ নিশ্চিত? আবার চাপুন';setTimeout(()=>{el.dataset.s='';sp.textContent=label},4000);return}el.dataset.s='';sp.textContent=label;fn()}}
+twoTap('dall','🗑️ সব তথ্য মুছুন',()=>{S={};cur=null;refreshAll();$('psm').textContent='সব তথ্য মুছে গেছে'});
+twoTap('rbill','🧾 সব বিল রিসেট',()=>{Object.values(S.months).forEach(m=>{m.extra={}});save();loadOT();$('psm').textContent='সব মাসের বোনাস, বিল ও কর্তন রিসেট হয়েছে'});
+$('shr').onclick=()=>{const t='হিসাব সাথী - OT ও খরচ — ওভারটাইম, খরচ, সঞ্চয় ও দেনা পাওনার হিসাবের অ্যাপ';try{if(navigator.share){navigator.share({title:'হিসাব সাথী - OT ও খরচ',text:t}).catch(()=>{});return}}catch(e){}$('psm').textContent='শেয়ার এখন এই ডিভাইসে সমর্থিত নয়'};
+$('rtus').onclick=()=>{$('psm').textContent='Play Store-এ প্রকাশের পর এখান থেকে রেটিং দেওয়া যাবে'};
+$('exit').onclick=()=>{try{window.close()}catch(e){}$('psm').textContent='অ্যাপ বন্ধ করতে ফোনের হোম বাটন চাপুন'};
+$('cb').value=S.settings.gross??'';
+$('cm').onchange=()=>{$('cxw').hidden=$('cm').value==='auto'};
+$('cs').onchange=()=>{const g=$('cs').value==='gross';$('clb').textContent=g?'মূল (মোট) বেতন (টাকা)':'বেসিক বেতন (টাকা)';$('cb').value=(g?S.settings.gross:S.settings.basic)??'';$('cres').hidden=true};
+$('cgo').onclick=()=>{const g=$('cs').value==='gross',s=v('cb'),h=v('ch'),ab=v('cat'),cu=$('cm').value==='custom',box=$('cres');box.hidden=false;
+ const b=g?Math.round((s-2450)/1.5):s,r=cu?v('cx'):b/208*2,gr=g?s:(b>0?Math.round(b*1.5+2450):0);
+ if(!cu&&b<=0){box.innerHTML='<p class="mu">'+(g&&s>0?'মূল বেতন ২,৪৫০ টাকার বেশি হতে হবে':'বেতন লিখুন')+'</p>';return}
+ if(cu&&(r<=0||h<=0)){box.innerHTML='<p class="mu">প্রতি ঘণ্টার রেট ও OT ঘণ্টা লিখুন</p>';return}
+ let t='';
+ if(gr>0)t+=`<div class="line"><span class="rk">মূল বেতন</span><b>${money(gr)}</b></div>`;
+ if(!cu)t+=`<div class="line"><span class="rk">বেসিক বেতন</span><b>${money(b)}</b></div>`;
+ t+=`<div class="line"><span class="rk">প্রতি ঘণ্টা OT রেট</span><b>${money(r)}</b></div>`;
+ if(h>0)t+=`<div class="line"><span class="rk">OT ঘণ্টা</span><b>${bn(h)}</b></div><div class="line tot"><span>OT থেকে পাবেন</span><b>${money(r*h)}</b></div>`;
+ else t+='<p class="mu">OT ঘণ্টা লিখলে মোট OT টাকাও দেখাবে</p>';
+ if(ab>0)t+=`<div class="line"><span class="rk">হাজিরা বোনাস</span><b>${money(ab)}</b></div>`;
+ if(gr>0&&(h>0||ab>0))t+=`<div class="line tot"><span>সর্বমোট বেতন</span><b>${money(gr+(h>0?r*h:0)+ab)}</b></div>`;
+ if(g&&!cu)t+='<p class="mu">বেসিক = (মূল বেতন − ২৪৫০) ÷ ১.৫ ধরা হয়েছে</p>';
+ if(!g&&gr>0)t+='<p class="mu">মূল বেতন = বেসিক × ১.৫ + ২৪৫০ ধরা হয়েছে</p>';
+ box.innerHTML=t};
+applyTheme();
+
+loadOT();renderPlan();renderExp();renderSave();renderDebt();route();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+<div id="slip" hidden style="position:fixed;inset:0;background:#fff;color:#111;z-index:40;overflow:auto"></div>
+<style>@media print{body>*:not(#slip){display:none!important}#slip{position:static!important}.np{display:none}}#slip .mu{color:#555}#slip button{color:#fff;background:#0f7a5c}#slip button.g{color:#0f7a5c;background:transparent}</style>
+<script>
+/* ===== নতুন ফিচার ===== */
+(()=>{
+const g=id=>document.getElementById(id),C=['🍚 খাবার','🏠 বাড়ি ভাড়া','🚌 যাতায়াত','💊 ওষুধ','💡 বিল (বিদ্যুৎ/গ্যাস)','📱 মোবাইল রিচার্জ','📲 বিকাশ/নগদ','🌍 রেমিট্যান্স','🏦 DPS/সমিতি কিস্তি','📦 অন্যান্য'],PC=['#0f7a5c','#1e6fd9','#e08a00','#c0392b','#8e44ad','#16a2b8','#d35480','#7f8c8d','#5d9c2f','#a0522d'];
+['ecat','rc'].forEach(i=>g(i).innerHTML=C.map(c=>`<option>${c}</option>`).join(''));
+T.rec='🔁 নিয়মিত খরচ';
+const gb=window.goBack;window.goBack=()=>location.hash==='#rec'?location.hash='expense':gb();
+const mkey=(k,d)=>{const x=new Date(k+'-01');x.setMonth(x.getMonth()+d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')};
+const cmp=(c,p,up)=>`<h2>গত মাসের সাথে তুলনা</h2><div class="line"><span>এই মাস</span><b>${money(c)}</b></div><div class="line"><span>গত মাস</span><b>${money(p)}</b></div><p class="${(c>p)===up?'ok':'bad'}">${c===p?'একই আছে':'গত মাসের চেয়ে '+money(Math.abs(c-p))+(c>p?' বেশি':' কম')}</p>`;
+/* খরচ: খাত + চার্ট */
+let n0=0;g('eadd').addEventListener('click',()=>{n0=S.exp.length},true);
+g('eadd').addEventListener('click',()=>{if(S.exp.length>n0){S.exp[S.exp.length-1].c=g('ecat').value;save();renderExp()}});
+function xe(){const mo=today.slice(0,7),ms=S.exp.filter(x=>x.d.startsWith(mo)),by={};ms.forEach(x=>{const k=x.c||C[9];by[k]=(by[k]||0)+x.a});
+ const t=ms.reduce((s,x)=>s+x.a,0),en=Object.entries(by).sort((a,b)=>b[1]-a[1]);let a=0;
+ const cg=en.map(([k,x],i)=>{const s=a;a+=x/t*100;return PC[i%10]+' '+s+'% '+a+'%'}).join(',');
+ g('pie').innerHTML=t?`<div style="display:flex;gap:14px;align-items:center"><div style="width:110px;height:110px;border-radius:50%;flex:none;background:conic-gradient(${cg})"></div><div style="flex:1">${en.map(([k,x],i)=>`<div class="line"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${PC[i%10]};margin-right:6px"></i>${esc(k)}</span><b>${money(x)}</b></div>`).join('')}</div></div>`:'<p class="mu">এই মাসে কোনো খরচ নেই</p>';
+ g('xcmp').innerHTML=cmp(t,S.exp.filter(x=>x.d.startsWith(mkey(mo,-1))).reduce((s,x)=>s+x.a,0),false)}
+const re=renderExp;window.renderExp=()=>{re();xe();xr()};
+/* নিয়মিত খরচ */
+S.rec=S.rec||[];
+function xr(){S.rec=S.rec||[];const mo=today.slice(0,7);g('rlist').innerHTML=S.rec.map((r,i)=>`<div class="card"><div class="line"><b>${esc(r.n)}</b><b>${money(r.a)}</b></div><small class="mu">${esc(r.c)} · প্রতি মাসের ${bn(r.d)} তারিখ</small><div class="row"><button type="button" data-p="${i}" ${r.last===mo?'disabled':''}>${r.last===mo?'✓ এ মাসে লেখা হয়েছে':'✅ এখন খরচ লিখুন'}</button><button type="button" class="g" data-x="${i}">মুছুন</button></div></div>`).join('')||'<p class="mu">কোনো নিয়মিত খরচ নেই</p>'}
+g('radd').onclick=()=>{const a=v('ra'),n=g('rn').value.trim(),d=Math.min(31,Math.max(1,v('rd')||1));if(!n||a<=0)return;S.rec.push({n,a,d,c:g('rc').value});['rn','ra','rd'].forEach(i=>g(i).value='');save();xr();renderNotify()};
+g('rlist').onclick=e=>{const t=e.target.dataset,mo=today.slice(0,7);if(t.p!==undefined){const r=S.rec[+t.p];S.exp.push({a:r.a,n:r.n,c:r.c,d:today});r.last=mo}else if(t.x!==undefined)S.rec.splice(+t.x,1);else return;save();xr();renderExp();renderNotify()};
+/* OT: গুণক, অনুপস্থিতি, অগ্রিম, তুলনা */
+function xo(){const m=M(),mx=parseFloat(S.settings.mx)||2,hx=parseFloat(S.settings.hx)||2,b=v('basic')/208;let th=0,ot=0;
+ m.entries.forEach(e=>{th+=e.h;ot+=e.h*b*(new Date(e.d).getDay()===5?hx:mx)});
+ const ex=v('att')+v('night')+v('tiffin'),ab=(+m.extra.xab||0)*v('gross')/30,dd=v('ded')+ab+(+m.extra.xad||0);
+ g('rate').textContent=money(b*mx);g('r2').textContent=money(ot);g('r4').textContent=money(dd);g('r5').textContent=money(v('gross')+ot+ex-dd);
+ g('dsh').innerHTML='<tr><th>তারিখ</th><th>বার</th><th>ঘণ্টা</th><th>টাকা</th></tr>'+m.entries.map(e=>`<tr><td>${dfmt(e.d)}</td><td>${new Date(e.d).toLocaleDateString('bn-BD',{weekday:'short'})}</td><td>${bn(e.h)}</td><td>${money(e.h*b*(new Date(e.d).getDay()===5?hx:mx))}</td></tr>`).join('')+`<tr><th colspan="2">মোট</th><th>${bn(th)}</th><th>${money(ot)}</th></tr>`;
+ const ph=(S.months[mkey(g('month').value,-1)]?.entries||[]).reduce((s,e)=>s+e.h,0);
+ g('ocmp').innerHTML=cmp(th,ph,true).replace(/money/g,'').replace(/(\d[\d,.]*) ৳/g,'$1 ঘণ্টা').replace('<h2>','<h2>⏱️ OT ঘণ্টা — ')}
+const ro=renderOT;window.renderOT=()=>{ro();xo()};
+const lo=loadOT;window.loadOT=()=>{lo();g('xmx').value=S.settings.mx??'';g('xhx').value=S.settings.hx??'';g('xab').value=M().extra.xab??'';g('xad').value=M().extra.xad??'';xo()};
+['xmx','xhx'].forEach(i=>g(i).addEventListener('input',()=>{S.settings[i.slice(1)]=g(i).value;save();renderOT()}));
+['xab','xad'].forEach(i=>g(i).addEventListener('input',()=>{M().extra[i]=g(i).value;save();renderOT()}));
+/* বেতন স্লিপ */
+g('slipbtn').onclick=()=>{const L=(a,b,c)=>`<div class="line"${c?' style="font-weight:700;border-top:2px solid #333;margin-top:6px"':''}><span>${a}</span><span>${b}</span></div>`;
+ g('slip').innerHTML=`<div style="max-width:520px;margin:auto;padding:18px"><h2 style="text-align:center">বেতন স্লিপ</h2><p style="text-align:center">${esc(S.settings.name||'')} · ${new Date(g('month').value+'-01').toLocaleDateString('bn-BD',{month:'long',year:'numeric'})}</p>${L('মোট বেতন',g('r1').textContent)}${L('OT ('+g('th').textContent+' ঘণ্টা)',g('r2').textContent)}${L('বোনাস ও বিল',g('r3').textContent)}${L('কর্তন/অনুপস্থিতি/অগ্রিম','− '+g('r4').textContent)}${L('নিট পাবেন',g('r5').textContent,1)}<div class="np"><button type="button" onclick="window.print()">🖨️ প্রিন্ট / PDF</button><button type="button" class="g" onclick="this.closest('#slip').hidden=true">বন্ধ করুন</button><p class="mu">প্রিন্ট না খুললে স্ক্রিনশট নিন।</p></div></div>`;g('slip').hidden=false;};
+/* দেনা পাওনা: তারিখ + তাগাদা */
+const rt=renderT;window.renderT=()=>{rt();const p=cur,b=bal(p),d=(p.m||'').replace(/\D/g,''),ph=d.startsWith('880')?d:d.startsWith('0')?'88'+d:d;g('tdue').value=p.due||'';
+ const msg=encodeURIComponent(`আসসালামু আলাইকুম ${p.n}, আপনার কাছে আমার ${money(b)} পাওনা আছে${p.due?', '+dfmt(p.due)+' এর মধ্যে দিলে ভালো হয়':''}। ধন্যবাদ।`);
+ g('twa').href='https://wa.me/'+ph+'?text='+msg;g('tsm').href='sms:'+(p.m||'')+'?body='+msg;g('tpush').hidden=!(b>0&&ph)};
+g('tdue').addEventListener('input',()=>{if(cur){cur.due=g('tdue').value;save();renderNotify()}});
+const rn=renderNotify;window.renderNotify=()=>{rn();const N=[],mo=today.slice(0,7);
+ S.ppl.forEach(p=>{const b=bal(p);if(p.due&&b&&p.due<=today)N.push(['⏰',p.n+(b>0?' এর কাছে পাওনা ':' কে দেওয়ার ')+money(Math.abs(b))+' — তারিখ '+(p.due<today?'পেরিয়ে গেছে':'আজ'),'#db-list'])});
+ (S.rec||[]).forEach(r=>{if(r.last!==mo&&now.getDate()>=r.d-2)N.push(['🔁',r.n+' ('+money(r.a)+') '+(now.getDate()>=r.d?'দেওয়ার সময় হয়েছে':'শীঘ্রই দিতে হবে'),'#rec'])});
+ if(!N.length)return;const l=g('nlist'),h=N.map(n=>`<a class="card nt" href="${n[2]}"><span style="font-size:1.5rem">${n[0]}</span><span>${esc(n[1])}</span></a>`).join('');l.innerHTML=l.querySelector('p')?h:h+l.innerHTML;g('nb').textContent=l.querySelectorAll('a.nt').length;g('nb').hidden=false};
+/* CSV */
+g('bcsv').onclick=()=>{const q=s=>'"'+String(s??'').replace(/"/g,'""')+'"',R=[['ওভারটাইম'],['মাস','তারিখ','ঘণ্টা']];
+ Object.entries(S.months).forEach(([k,m])=>m.entries.forEach(e=>R.push([k,e.d,e.h])));R.push([],['খরচ'],['তারিখ','খাত','বিবরণ','টাকা']);S.exp.forEach(x=>R.push([x.d,x.c||'',x.n,x.a]));
+ R.push([],['দেনা পাওনা'],['নাম','তারিখ','ধরন','টাকা','বিবরণ']);S.ppl.forEach(p=>p.tx.forEach(x=>R.push([p.n,x.d,x.t==='g'?'দিয়েছি':'পেয়েছি',x.a,x.n])));
+ const t='\ufeff'+R.map(r=>r.map(q).join(',')).join('\n');g('bt').value=t;g('bt').select();
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='hisab.csv';a.click()}catch(e){}
+ g('kmsg').textContent='✓ CSV তৈরি। ডাউনলোড না হলে "কপি করুন" চেপে Excel বা Google Sheets-এ পেস্ট করুন। (রিস্টোর করার আগে ঘর খালি করুন)'};
+renderExp();renderOT();renderNotify();
+})();
+</script>
+</body>
+</html>
