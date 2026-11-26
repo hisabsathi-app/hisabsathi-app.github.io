@@ -19,7 +19,7 @@ html,body{margin:0}
 body{background:var(--bg);color:var(--tx);font-family:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;padding:14px;max-width:520px;margin:auto;line-height:1.5}
 header{display:flex;align-items:center;gap:10px;margin:4px 0 14px}
 header h1{font-size:1.25rem;margin:0;color:var(--pr);flex:1}
-#back{width:auto;margin:0;padding:6px 12px;background:var(--card);color:var(--pr);border:1px solid var(--bd)}
+#back{width:auto;margin:0;padding:7px 14px;background:var(--pr);color:#fff;border:1px solid var(--pr);font-weight:700}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/.92;padding:8px;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:1.08rem;text-align:center}
 .tile span{font-size:2.4rem}
@@ -71,7 +71,7 @@ section[hidden]{display:none}
 </style>
 </head>
 <body>
-<header><button id="back" type="button" hidden onclick="goBack()">← ফিরুন</button><h1 id="ttl">📒 হিসাব সাথী - OT ও খরচ</h1><button id="bell" type="button" aria-label="নোটিফিকেশন" onclick="location.hash='notif'">🔔<i id="nb" hidden></i></button></header>
+<header><button id="back" type="button" hidden onclick="goBack()">← ব্যাক</button><h1 id="ttl">📒 হিসাব সাথী - OT ও খরচ</h1><button id="bell" type="button" aria-label="নোটিফিকেশন" onclick="location.hash='notif'">🔔<i id="nb" hidden></i></button></header>
 
 <section id="s-home">
 <div class="grid">
@@ -94,7 +94,7 @@ section[hidden]{display:none}
 <a class="tile" href="#ot-report"><span>📊</span>রিপোর্ট<small>মোট বেতনের হিসাব</small></a>
 <a class="tile" href="#ot-others"><span>💵</span>মূল বেতন এড<small>বেতন, বোনাস, বিল</small></a>
 </div>
-<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr);font-size:min(.85rem,3.9vw);white-space:nowrap">নিজের পরিশ্রমের সঠিক হিসাব রাখুন, নিজের প্রাপ্য বুঝে নিন।</p>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr);font-size:min(.8rem,3.6vw);white-space:nowrap">নিজের পরিশ্রমের সঠিক হিসাব রাখুন, নিজের প্রাপ্য বুঝে নিন।</p>
 </section>
 
 <section id="s-ot-others">
