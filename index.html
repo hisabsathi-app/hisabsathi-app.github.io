@@ -14,15 +14,16 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}}
 :root[data-theme="dark"]{--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}
 *{box-sizing:border-box}
+html{font-size:112.5%;-webkit-text-size-adjust:100%}
 html,body{margin:0}
 body{background:var(--bg);color:var(--tx);font-family:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;padding:14px;max-width:520px;margin:auto;line-height:1.5}
 header{display:flex;align-items:center;gap:10px;margin:4px 0 14px}
 header h1{font-size:1.25rem;margin:0;color:var(--pr);flex:1}
 #back{width:auto;margin:0;padding:6px 12px;background:var(--card);color:var(--pr);border:1px solid var(--bd)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/.78;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:.95rem;text-align:center}
-.tile span{font-size:1.9rem}
-.tile small{font-weight:400;color:var(--mu);font-size:.72rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/.92;padding:8px;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:1.08rem;text-align:center}
+.tile span{font-size:2.4rem}
+.tile small{font-weight:400;color:var(--mu);font-size:.82rem;line-height:1.35}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
 h2{font-size:1rem;margin:0 0 10px}
 label{display:block;font-size:.85rem;color:var(--mu);margin:8px 0 3px}
@@ -89,11 +90,11 @@ section[hidden]{display:none}
 <section id="s-overtime">
 <div class="grid">
 <a class="tile" href="#ot-add"><span>➕</span>ঘণ্টা যোগ<small>আজকের OT লিখুন</small></a>
-<a class="tile" href="#ot-list"><span>📋</span>মাসের তালিকা<small>মাসের সব এন্ট্রি</small></a>
+<a class="tile" href="#ot-list"><span>📋</span>মাসের তালিকা<small>এক নজরে মাসের OT দেখুন</small></a>
 <a class="tile" href="#ot-report"><span>📊</span>রিপোর্ট<small>মোট বেতনের হিসাব</small></a>
-<a class="tile" href="#ot-others"><span>💵</span><b style="font-size:1.15rem">মূল বেতন এড</b><small>বেতন, বোনাস, বিল</small></a>
+<a class="tile" href="#ot-others"><span>💵</span>মূল বেতন এড<small>বেতন, বোনাস, বিল</small></a>
 </div>
-<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">নিজের পরিশ্রমের সঠিক হিসাব রাখুন, নিজের প্রাপ্য বুঝে নিন।</p>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr);font-size:min(.85rem,3.9vw);white-space:nowrap">নিজের পরিশ্রমের সঠিক হিসাব রাখুন, নিজের প্রাপ্য বুঝে নিন।</p>
 </section>
 
 <section id="s-ot-others">
