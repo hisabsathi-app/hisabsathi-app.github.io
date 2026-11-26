@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "হিসাব সাথী - OT ও খরচ",
   "short_name": "হিসাব সাথী",
   "description": "Hisab Sathi - OT & Expense",
@@ -9,6 +10,7 @@
   "orientation": "portrait",
   "background_color": "#eef5f1",
   "theme_color": "#0f7a5c",
+  "categories": ["finance", "productivity"],
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
