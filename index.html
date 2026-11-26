@@ -52,8 +52,11 @@ body{padding-bottom:96px}
 #nav a{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--mu);font-size:.75rem}
 #nav a span{font-size:1.4rem;position:relative}
 #nav a.on{color:var(--pr);font-weight:700}
-#nb{position:absolute;top:-4px;right:-12px;background:var(--bad);color:#fff;border-radius:9px;font-size:.65rem;font-style:normal;padding:0 5px;min-width:16px;line-height:16px}
+#nb{position:absolute;top:-4px;right:-4px;background:var(--bad);color:#fff;border-radius:9px;font-size:.65rem;font-style:normal;padding:0 5px;min-width:16px;line-height:16px}
 #nb[hidden]{display:none}
+#bell{width:44px;height:44px;margin:0;padding:0;font-size:1.3rem;line-height:1;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:50%;position:relative;flex:none}
+#bell[hidden]{display:none}
+#s-calc h2{font-size:1.5rem;font-weight:800;color:var(--pr);margin:0 0 12px}
 #nav a{font-size:.68rem;white-space:nowrap}
 .nt{display:flex;gap:12px;align-items:center;color:var(--tx);text-decoration:none}
 #dlist{padding-bottom:84px}
@@ -67,7 +70,7 @@ section[hidden]{display:none}
 </style>
 </head>
 <body>
-<header><button id="back" type="button" hidden onclick="goBack()">← ফিরুন</button><h1 id="ttl">📒 হিসাব সাথী - OT ও খরচ</h1></header>
+<header><button id="back" type="button" hidden onclick="goBack()">← ফিরুন</button><h1 id="ttl">📒 হিসাব সাথী - OT ও খরচ</h1><button id="bell" type="button" aria-label="নোটিফিকেশন" onclick="location.hash='notif'">🔔<i id="nb" hidden></i></button></header>
 
 <section id="s-home">
 <div class="grid">
@@ -78,6 +81,8 @@ section[hidden]{display:none}
 </div>
 <p class="mu" id="hg" style="text-align:center;margin-top:16px">সব তথ্য আপনার ফোনেই সেভ থাকে</p>
 </section>
+
+<section id="s-notif"><div id="nlist"></div></section>
 
 <div class="card" id="otbar" hidden><h2>মাস</h2><input type="month" id="month"></div>
 <section id="s-overtime">
@@ -387,13 +392,13 @@ const now=new Date(),lt=now-now.getTimezoneOffset()*6e4,today=new Date(lt).toISO
 $('month').value=today.slice(0,7);
 
 /* navigation */
-const T={home:'📒 হিসাব সাথী - OT ও খরচ',overtime:'⏱️ ওভারটাইম হিসাব',plan:'💵 সঞ্চয় হিসাব',expense:'🧾 প্রতিদিনের খরচ',debt:'🤝 দেনা পাওনা','ot-add':'➕ ঘণ্টা যোগ','ot-list':'📋 মাসের তালিকা','ot-report':'📊 রিপোর্ট','ot-others':'💼 বেতন এড','ex-add':'💸 আজকের খরচ','ex-list':'🗒️ খরচের তালিকা','ex-report':'📈 খরচের রিপোর্ট','ex-budget':'👛 বাজেট','pl-save':'💰 সঞ্চয় যোগ','pl-book':'📒 সঞ্চয়ের খাতা','pl-new':'📝 নতুন পরিকল্পনা','db-new':'🤝 দেনা পাওনা','db-list':'🗒️ দেনা পাওনা তালিকা',backup:'💾 ব্যাকআপ ও রিস্টোর',calc:'🧮 ক্যালকুলেটর',appinfo:'ℹ️ অ্যাপের তথ্য',profile:'👤 প্রোফাইল','ot-sheet':'📄 ওভারটাইম ডেটাশিট','info-contact':'✉️ যোগাযোগ','info-tutorial':'▶️ কীভাবে ব্যবহার করবেন','info-privacy':'🔒 প্রাইভেসি পলিসি'};
+const T={notif:'🔔 নোটিফিকেশন',home:'📒 হিসাব সাথী - OT ও খরচ',overtime:'⏱️ ওভারটাইম হিসাব',plan:'💵 সঞ্চয় হিসাব',expense:'🧾 প্রতিদিনের খরচ',debt:'🤝 দেনা পাওনা','ot-add':'➕ ঘণ্টা যোগ','ot-list':'📋 মাসের তালিকা','ot-report':'📊 রিপোর্ট','ot-others':'💵 মূল বেতন এড করুন','ex-add':'💸 আজকের খরচ','ex-list':'🗒️ খরচের তালিকা','ex-report':'📈 খরচের রিপোর্ট','ex-budget':'👛 বাজেট','pl-save':'💰 সঞ্চয় যোগ','pl-book':'📒 সঞ্চয়ের খাতা','pl-new':'📝 নতুন পরিকল্পনা','db-new':'🤝 দেনা পাওনা','db-list':'🗒️ দেনা পাওনা তালিকা',backup:'💾 ব্যাকআপ ও রিস্টোর',calc:'🧮 ক্যালকুলেটর',appinfo:'ℹ️ অ্যাপের তথ্য',profile:'👤 প্রোফাইল','ot-sheet':'📄 ওভারটাইম ডেটাশিট','info-contact':'✉️ যোগাযোগ','info-tutorial':'▶️ কীভাবে ব্যবহার করবেন','info-privacy':'🔒 প্রাইভেসি পলিসি'};
 function goBack(){const h=location.hash.slice(1);location.hash=(h==='ot-sheet'||h.startsWith('info-'))?'profile':h.startsWith('ot-')?'overtime':h.startsWith('ex-')?'expense':h.startsWith('pl-')?'plan':h.startsWith('db-')?'debt':h==='backup'?'profile':''}
 function route(){
  let h=location.hash.slice(1);if(!T[h])h='home';
  document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=='s-'+h);
- $('back').hidden=['home','calc','appinfo','profile'].includes(h);$('otbar').hidden=!h.startsWith('ot-');$('ttl').textContent=T[h];window.scrollTo(0,0);
- const nk=h==='ot-list'?'list':h==='calc'?'calc':h==='appinfo'?'info':(h==='profile'||h==='backup'||h==='ot-sheet'||h.startsWith('info-'))?'profile':'home';['home','list','calc','info','profile'].forEach(k=>$('n-'+k).classList.toggle('on',k===nk));renderProfile();
+ $('back').hidden=['home','calc','appinfo','profile'].includes(h);$('bell').hidden=h!=='home';$('otbar').hidden=!h.startsWith('ot-');$('ttl').textContent=T[h];window.scrollTo(0,0);
+ const nk=h==='ot-list'?'list':h==='calc'?'calc':h==='appinfo'?'info':(h==='profile'||h==='backup'||h==='ot-sheet'||h.startsWith('info-'))?'profile':'home';['home','list','calc','info','profile'].forEach(k=>$('n-'+k).classList.toggle('on',k===nk));renderProfile();renderNotify();
 }
 addEventListener('hashchange',route);
 
@@ -577,12 +582,12 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
 <script>
 /* ===== নতুন ফিচার ===== */
 (()=>{
-const g=id=>document.getElementById(id),C=['🍚 খাবার','🏠 বাড়ি ভাড়া','🚌 যাতায়াত','💊 ওষুধ','💡 বিল (বিদ্যুৎ/গ্যাস)','📱 মোবাইল রিচার্জ','📲 বিকাশ/নগদ','🌍 রেমিট্যান্স','🏦 DPS/সমিতি কিস্তি','📦 অন্যান্য'],PC=['#0f7a5c','#1e6fd9','#e08a00','#c0392b','#8e44ad','#16a2b8','#d35480','#7f8c8d','#5d9c2f','#a0522d'];
+const g=id=>document.getElementById(id),C=['🛒 বাজার','🛍️ কেনাকাটা','🍚 খাবার','🏠 বাড়ি ভাড়া','🚌 যাতায়াত','💊 ওষুধ','💡 বিল (বিদ্যুৎ/গ্যাস)','📱 মোবাইল রিচার্জ','🏦 DPS/সমিতি কিস্তি','📦 অন্যান্য'],PC=['#0f7a5c','#1e6fd9','#e08a00','#c0392b','#8e44ad','#16a2b8','#d35480','#7f8c8d','#5d9c2f','#a0522d'];
 ['ecat','rc'].forEach(i=>g(i).innerHTML=C.map(c=>`<option>${c}</option>`).join(''));
 T.rec='🔁 নিয়মিত খরচ';
 const gb=window.goBack;window.goBack=()=>location.hash==='#rec'?location.hash='expense':gb();
 const mkey=(k,d)=>{const x=new Date(k+'-01');x.setMonth(x.getMonth()+d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')};
-const cmp=(c,p,up)=>`<h2>গত মাসের সাথে তুলনা</h2><div class="line"><span>এই মাস</span><b>${money(c)}</b></div><div class="line"><span>গত মাস</span><b>${money(p)}</b></div><p class="${(c>p)===up?'ok':'bad'}">${c===p?'একই আছে':'গত মাসের চেয়ে '+money(Math.abs(c-p))+(c>p?' বেশি':' কম')}</p>`;
+const cmp=(c,p,up,f=money)=>`<h2>গত মাসের সাথে তুলনা</h2><div class="line"><span>এই মাস</span><b>${f(c)}</b></div><div class="line"><span>গত মাস</span><b>${f(p)}</b></div><p class="${(c>p)===up?'ok':'bad'}">${c===p?'একই আছে':'গত মাসের চেয়ে '+f(Math.abs(c-p))+(c>p?' বেশি':' কম')}</p>`;
 /* খরচ: খাত + চার্ট */
 let n0=0;g('eadd').addEventListener('click',()=>{n0=S.exp.length},true);
 g('eadd').addEventListener('click',()=>{if(S.exp.length>n0){S.exp[S.exp.length-1].c=g('ecat').value;save();renderExp()}});
@@ -604,14 +609,34 @@ function xo(){const m=M(),mx=parseFloat(S.settings.mx)||2,hx=parseFloat(S.settin
  g('rate').textContent=money(b*mx);g('r2').textContent=money(ot);g('r4').textContent=money(dd);g('r5').textContent=money(v('gross')+ot+ex-dd);
  g('dsh').innerHTML='<tr><th>তারিখ</th><th>বার</th><th>ঘণ্টা</th><th>টাকা</th></tr>'+m.entries.map(e=>`<tr><td>${dfmt(e.d)}</td><td>${new Date(e.d).toLocaleDateString('bn-BD',{weekday:'short'})}</td><td>${bn(e.h)}</td><td>${money(e.h*b*(new Date(e.d).getDay()===5?hx:mx))}</td></tr>`).join('')+`<tr><th colspan="2">মোট</th><th>${bn(th)}</th><th>${money(ot)}</th></tr>`;
  const ph=(S.months[mkey(g('month').value,-1)]?.entries||[]).reduce((s,e)=>s+e.h,0);
- g('ocmp').innerHTML=cmp(th,ph,true).replace(/money/g,'').replace(/(\d[\d,.]*) ৳/g,'$1 ঘণ্টা').replace('<h2>','<h2>⏱️ OT ঘণ্টা — ')}
+ g('ocmp').innerHTML=cmp(th,ph,true,x=>bn(x)+' ঘণ্টা').replace('<h2>','<h2>⏱️ OT ঘণ্টা — ')}
 const ro=renderOT;window.renderOT=()=>{ro();xo()};
 const lo=loadOT;window.loadOT=()=>{lo();g('xmx').value=S.settings.mx??'';g('xhx').value=S.settings.hx??'';g('xab').value=M().extra.xab??'';g('xad').value=M().extra.xad??'';xo()};
 ['xmx','xhx'].forEach(i=>g(i).addEventListener('input',()=>{S.settings[i.slice(1)]=g(i).value;save();renderOT()}));
 ['xab','xad'].forEach(i=>g(i).addEventListener('input',()=>{M().extra[i]=g(i).value;save();renderOT()}));
-/* বেতন স্লিপ */
-g('slipbtn').onclick=()=>{const L=(a,b,c)=>`<div class="line"${c?' style="font-weight:700;border-top:2px solid #333;margin-top:6px"':''}><span>${a}</span><span>${b}</span></div>`;
- g('slip').innerHTML=`<div style="max-width:520px;margin:auto;padding:18px"><h2 style="text-align:center">বেতন স্লিপ</h2><p style="text-align:center">${esc(S.settings.name||'')} · ${new Date(g('month').value+'-01').toLocaleDateString('bn-BD',{month:'long',year:'numeric'})}</p>${L('মোট বেতন',g('r1').textContent)}${L('OT ('+g('th').textContent+' ঘণ্টা)',g('r2').textContent)}${L('বোনাস ও বিল',g('r3').textContent)}${L('কর্তন/অনুপস্থিতি/অগ্রিম','− '+g('r4').textContent)}${L('নিট পাবেন',g('r5').textContent,1)}<div class="np"><button type="button" onclick="window.print()">🖨️ প্রিন্ট / PDF</button><button type="button" class="g" onclick="this.closest('#slip').hidden=true">বন্ধ করুন</button><p class="mu">প্রিন্ট না খুললে স্ক্রিনশট নিন।</p></div></div>`;g('slip').hidden=false;};
+/* বেতন স্লিপ: PDF / ছবি */
+function slipCv(){const W=1190,H=1684,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),F='"Noto Sans Bengali","Hind Siliguri","Kalpurush",sans-serif',nm=(S.settings.name||'').trim(),mo=new Date(g('month').value+'-01').toLocaleDateString('bn-BD',{month:'long',year:'numeric'});
+ x.fillStyle='#fff';x.fillRect(0,0,W,H);x.fillStyle='#0f7a5c';x.fillRect(0,0,W,220);
+ x.fillStyle='#fff';x.textAlign='center';const ht='App: 📒 হিসাব সাথী - OT ও খরচ';let hf=66;x.font='bold '+hf+'px '+F;while(x.measureText(ht).width>W-100&&hf>40){hf-=2;x.font='bold '+hf+'px '+F}x.fillText(ht,W/2,138);
+ x.fillStyle='#111';x.font='bold 56px '+F;x.fillText('বেতন স্লিপ',W/2,345);
+ x.fillStyle='#555';x.font='42px '+F;x.fillText((nm?nm+' · ':'')+mo,W/2,420);
+ const R=[['মোট বেতন',g('r1').textContent],['OT ('+g('th').textContent+' ঘণ্টা)',g('r2').textContent],['বোনাস ও বিল',g('r3').textContent],['কর্তন / অনুপস্থিতি / অগ্রিম','− '+g('r4').textContent]];let y=550;
+ R.forEach(r=>{x.fillStyle='#222';x.font='46px '+F;x.textAlign='left';x.fillText(r[0],90,y);x.textAlign='right';x.fillText(r[1],W-90,y);x.fillStyle='#ddd';x.fillRect(90,y+38,W-180,3);y+=115});
+ x.fillStyle='#0f7a5c';x.fillRect(90,y-10,W-180,6);y+=70;x.font='bold 56px '+F;x.textAlign='left';x.fillText('নিট পাবেন',90,y);x.textAlign='right';x.fillText(g('r5').textContent,W-90,y);
+ x.fillStyle='#0f7a5c';x.font='50px '+F;x.textAlign='center';x.fillText('হিসাব সাথী অ্যাপ থেকে তৈরি · '+dfmt(today),W/2,H-70);return c}
+function mkPdf(j,w,h){const E=new TextEncoder(),P=[],o=[];let n=0;const add=b=>{P.push(b);n+=b.length},s=t=>add(E.encode(t)),c='q 595 0 0 842 0 0 cm /I Do Q';
+ s('%PDF-1.4\n');o[1]=n;s('1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n');o[2]=n;s('2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n');
+ o[3]=n;s('3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</XObject<</I 4 0 R>>>>/Contents 5 0 R>>endobj\n');
+ o[4]=n;s(`4 0 obj<</Type/XObject/Subtype/Image/Width ${w}/Height ${h}/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length ${j.length}>>stream\n`);add(j);s('\nendstream endobj\n');
+ o[5]=n;s(`5 0 obj<</Length ${c.length}>>stream\n${c}\nendstream endobj\n`);const xr=n;
+ s('xref\n0 6\n0000000000 65535 f \n'+[1,2,3,4,5].map(i=>String(o[i]).padStart(10,'0')+' 00000 n \n').join('')+`trailer<</Size 6/Root 1 0 R>>\nstartxref\n${xr}\n%%EOF`);return new Blob(P,{type:'application/pdf'})}
+const slipFile=(t)=>new Promise(r=>{const c=slipCv(),k=g('month').value;if(t==='png')c.toBlob(b=>r(new File([b],'বেতন-স্লিপ-'+k+'.png',{type:'image/png'})),'image/png');else{const d=atob(c.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i);r(new File([mkPdf(u,c.width,c.height)],'বেতন-স্লিপ-'+k+'.pdf',{type:'application/pdf'}))}});
+const slipSave=async t=>{const f=await slipFile(t),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();g('slipm').textContent='সংরক্ষণ করা হয়েছে। ফোনের Downloads ফোল্ডারে বা গ্যালারিতে দেখুন। ফাইল না পেলে "শেয়ার করুন" বাটন চাপুন।'};
+g('slipbtn').onclick=()=>{const c=slipCv();c.style.cssText='width:100%;border:1px solid #ddd;border-radius:8px';
+ g('slip').innerHTML='<div style="max-width:520px;margin:auto;padding:14px"><div id="slipc"></div><div class="np" style="margin-top:12px"><button type="button" id="sp1">📄 PDF সংরক্ষণ</button><button type="button" class="g" id="sp2">🖼️ ছবি হিসেবে গ্যালারিতে সংরক্ষণ</button><button type="button" class="g" id="sp3">📤 শেয়ার করুন</button><button type="button" class="g" id="sp4">বন্ধ করুন</button><p class="mu" id="slipm"></p></div></div>';
+ g('slipc').appendChild(c);g('sp1').onclick=()=>slipSave('pdf');g('sp2').onclick=()=>slipSave('png');g('sp4').onclick=()=>g('slip').hidden=true;
+ g('sp3').onclick=async()=>{const f=await slipFile('pdf');try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:'বেতন স্লিপ'});else g('slipm').textContent='এই ডিভাইসে শেয়ার সুবিধা নেই, "PDF সংরক্ষণ" ব্যবহার করুন।'}catch(e){}};
+ g('slip').hidden=false};
 /* দেনা পাওনা: তারিখ + তাগাদা */
 const rt=renderT;window.renderT=()=>{rt();const p=cur,b=bal(p),d=(p.m||'').replace(/\D/g,''),ph=d.startsWith('880')?d:d.startsWith('0')?'88'+d:d;g('tdue').value=p.due||'';
  const msg=encodeURIComponent(`আসসালামু আলাইকুম ${p.n}, আপনার কাছে আমার ${money(b)} পাওনা আছে${p.due?', '+dfmt(p.due)+' এর মধ্যে দিলে ভালো হয়':''}। ধন্যবাদ।`);
@@ -620,7 +645,7 @@ g('tdue').addEventListener('input',()=>{if(cur){cur.due=g('tdue').value;save();r
 const rn=renderNotify;window.renderNotify=()=>{rn();const N=[],mo=today.slice(0,7);
  S.ppl.forEach(p=>{const b=bal(p);if(p.due&&b&&p.due<=today)N.push(['⏰',p.n+(b>0?' এর কাছে পাওনা ':' কে দেওয়ার ')+money(Math.abs(b))+' — তারিখ '+(p.due<today?'পেরিয়ে গেছে':'আজ'),'#db-list'])});
  (S.rec||[]).forEach(r=>{if(r.last!==mo&&now.getDate()>=r.d-2)N.push(['🔁',r.n+' ('+money(r.a)+') '+(now.getDate()>=r.d?'দেওয়ার সময় হয়েছে':'শীঘ্রই দিতে হবে'),'#rec'])});
- if(!N.length)return;const l=g('nlist'),h=N.map(n=>`<a class="card nt" href="${n[2]}"><span style="font-size:1.5rem">${n[0]}</span><span>${esc(n[1])}</span></a>`).join('');l.innerHTML=l.querySelector('p')?h:h+l.innerHTML;g('nb').textContent=l.querySelectorAll('a.nt').length;g('nb').hidden=false};
+ const l=g('nlist');if(N.length){const h=N.map(n=>`<a class="card nt" href="${n[2]}"><span style="font-size:1.5rem">${n[0]}</span><span>${esc(n[1])}</span></a>`).join('');l.innerHTML=l.querySelector('p')?h:h+l.innerHTML}const c=l.querySelectorAll('a.nt').length;g('nb').textContent=bn(c);g('nb').hidden=!c};
 /* CSV */
 g('bcsv').onclick=()=>{const q=s=>'"'+String(s??'').replace(/"/g,'""')+'"',R=[['ওভারটাইম'],['মাস','তারিখ','ঘণ্টা']];
  Object.entries(S.months).forEach(([k,m])=>m.entries.forEach(e=>R.push([k,e.d,e.h])));R.push([],['খরচ'],['তারিখ','খাত','বিবরণ','টাকা']);S.exp.forEach(x=>R.push([x.d,x.c||'',x.n,x.a]));
