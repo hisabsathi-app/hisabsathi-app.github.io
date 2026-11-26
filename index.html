@@ -80,6 +80,7 @@ section[hidden]{display:none}
 <a class="tile" href="#debt"><span>🤝</span>দেনা পাওনা<small>কার কাছে কত</small></a>
 </div>
 <p class="mu" id="hg" style="text-align:center;margin-top:16px">সব তথ্য আপনার ফোনেই সেভ থাকে</p>
+<p id="tagline" style="text-align:center;margin:6px 0 0;font-weight:600;color:var(--pr)">হিসাব থাকুক সহজ, জীবন হোক সুন্দর।</p>
 </section>
 
 <section id="s-notif"><div id="nlist"></div></section>
@@ -92,6 +93,7 @@ section[hidden]{display:none}
 <a class="tile" href="#ot-report"><span>📊</span>রিপোর্ট<small>মোট বেতনের হিসাব</small></a>
 <a class="tile" href="#ot-others"><span>💵</span><b style="font-size:1.15rem">মূল বেতন এড</b><small>বেতন, বোনাস, বিল</small></a>
 </div>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">নিজের পরিশ্রমের সঠিক হিসাব রাখুন, নিজের প্রাপ্য বুঝে নিন।</p>
 </section>
 
 <section id="s-ot-others">
@@ -196,7 +198,7 @@ section[hidden]{display:none}
 <a class="mi" href="#info-tutorial"><span>▶️ কীভাবে ব্যবহার করবেন</span><span>›</span></a>
 <a class="mi" href="#info-privacy"><span>🔒 প্রাইভেসি পলিসি</span><span>›</span></a>
 </div>
-<div class="card mi" id="exit" style="color:var(--bad);border-color:var(--bad);font-weight:700"><span>← বের হন</span><span>›</span></div>
+<div class="card mi" id="exit" style="background:#c0392b;color:#fff;border-color:#c0392b;font-weight:700;justify-content:center;font-size:1.1rem"><span>বাহির</span></div>
 <p class="mu" id="psm" style="text-align:center"></p>
 </section>
 
@@ -234,6 +236,7 @@ section[hidden]{display:none}
 <a class="tile" href="#pl-book"><span>📒</span>সঞ্চয়ের খাতা<small>মাসভিত্তিক হিসাব ও মোট</small></a>
 <a class="tile" href="#pl-new"><span>📝</span>নতুন পরিকল্পনা<small>কাজ ও লক্ষ্য লিখুন</small></a>
 </div>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">আজকের সঞ্চয়, আগামী দিনের নিশ্চিন্ত জীবন।</p>
 </section>
 
 <section id="s-pl-save">
@@ -278,6 +281,7 @@ section[hidden]{display:none}
 <a class="tile" href="#ex-report"><span>📈</span>খরচের রিপোর্ট<small>আজ, সপ্তাহ, মাস</small></a>
 <a class="tile" href="#ex-budget"><span>👛</span>বাজেট<small>মাসে কত খরচ করবেন</small></a>
 </div>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">প্রতিটি টাকার হিসাব রাখুন, ভবিষ্যৎকে নিরাপদ রাখুন।</p>
 </section>
 
 <section id="s-ex-add">
@@ -323,6 +327,7 @@ section[hidden]{display:none}
 <a class="tile" href="#db-new"><span>➕</span>দেনা পাওনা<small>নতুন ব্যক্তি যোগ করুন</small></a>
 <a class="tile" href="#db-list"><span>🗒️</span>দেনা পাওনা তালিকা<small>কার কাছে কত</small></a>
 </div>
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">কার কাছে কত পাবেন, আর কাকে কত দেবেন—সব হিসাব রাখুন।</p>
 </section>
 
 <section id="s-db-list">
@@ -578,7 +583,7 @@ loadOT();renderPlan();renderExp();renderSave();renderDebt();route();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 <div id="slip" hidden style="position:fixed;inset:0;background:#fff;color:#111;z-index:40;overflow:auto"></div>
-<style>@media print{body>*:not(#slip){display:none!important}#slip{position:static!important}.np{display:none}}#slip .mu{color:#555}#slip button{color:#fff;background:#0f7a5c}#slip button.g{color:#0f7a5c;background:transparent}</style>
+<style>@media print{body>*:not(#slip){display:none!important}#slip{position:static!important}.np{display:none}}#slip .mu{color:#555}#slip button{color:#fff;background:#0f7a5c}#slip button.g{color:#0f7a5c;background:transparent}#slip button#sp4{background:#c0392b;color:#fff;border:0}</style>
 <script>
 /* ===== নতুন ফিচার ===== */
 (()=>{
