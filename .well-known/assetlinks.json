@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.hisabsathiapp.hisabsathi",
+        "sha256_cert_fingerprints": ["C9:CF:D2:66:9D:CE:B4:D5:2E:7A:C5:35:2A:F2:06:B1:CE:62:F3:CC:41:E5:DB:CC:96:42:6C:B4:F5:0C:F2:66"]
+      }
+    }]
