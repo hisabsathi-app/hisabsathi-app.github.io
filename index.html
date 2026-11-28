@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
 <title>হিসাব সাথী - OT ও খরচ</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f7a5c">
@@ -10,19 +10,19 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{--bg:#eef5f1;--card:#fff;--tx:#14261f;--mu:#62766d;--pr:#0f7a5c;--prt:#fff;--bd:#d6e4dc;--ok:#0f7a5c;--bad:#c0392b;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+box-sizing:border-box;padding-top:var(--safe-area-inset-top,env(safe-area-inset-top,0px));padding-bottom:var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px))}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}}
 :root[data-theme="dark"]{--bg:#0f1a15;--card:#18271f;--tx:#e8f3ed;--mu:#9bb2a7;--pr:#4cc9a0;--prt:#0f1a15;--bd:#2a4036;--ok:#4cc9a0;--bad:#ff8a7a}
 *{box-sizing:border-box}
-html{font-size:112.5%;-webkit-text-size-adjust:100%}
+html{font-size:93.75%;-webkit-text-size-adjust:100%}
 html,body{margin:0}
 body{background:var(--bg);color:var(--tx);font-family:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;padding:14px;max-width:520px;margin:auto;line-height:1.5}
 header{display:flex;align-items:center;gap:10px;margin:4px 0 14px}
-header h1{font-size:1.25rem;margin:0;color:var(--pr);flex:1}
+header h1{font-size:1.1rem;margin:0;color:var(--pr);flex:1}
 #back{width:auto;margin:0;padding:7px 14px;background:var(--pr);color:#fff;border:1px solid var(--pr);font-weight:700}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:1/.92;padding:8px;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:1.08rem;text-align:center}
-.tile span{font-size:2.4rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;align-items:stretch;gap:12px}.tile{min-width:0;overflow-wrap:anywhere;text-align:center}html,body{overflow-x:clip}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;aspect-ratio:auto;min-height:150px;padding:10px 4px;background:var(--card);border:1px solid var(--bd);border-radius:18px;text-decoration:none;color:var(--tx);font-weight:700;font-size:1rem;text-align:center}
+.tile span{font-size:2.2rem}
 .tile small{font-weight:400;color:var(--mu);font-size:.82rem;line-height:1.35}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
 h2{font-size:1rem;margin:0 0 10px}
@@ -49,7 +49,7 @@ body{padding-bottom:96px}
 .mi:last-child{border-bottom:0}
 .gh{margin:16px 4px 8px;color:var(--pr);font-size:1rem}
 #dsh th,#dsh td{border-bottom:1px solid var(--bd);padding:8px 4px;text-align:left}
-#nav{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));z-index:10}
+#nav{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 0 calc(6px + var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px)));z-index:10}
 #nav a{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--mu);font-size:.75rem}
 #nav a span{font-size:1.4rem;position:relative}
 #nav a.on{color:var(--pr);font-weight:700}
@@ -58,15 +58,15 @@ body{padding-bottom:96px}
 #bell{width:44px;height:44px;margin:0;padding:0;font-size:1.3rem;line-height:1;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:50%;position:relative;flex:none}
 #bell[hidden]{display:none}
 #s-calc h2{font-size:1.5rem;font-weight:800;color:var(--pr);margin:0 0 12px}
-#nav a{font-size:.68rem;white-space:nowrap}
+#nav a{font-size:11px;white-space:normal;text-align:center;line-height:1.2;min-width:0;padding:0 1px;overflow-wrap:anywhere}#nav a span{font-size:23px}
 .nt{display:flex;gap:12px;align-items:center;color:var(--tx);text-decoration:none}
 #dlist{padding-bottom:84px}
-#dfab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:18px;font-size:2rem;margin:0;padding:0;box-shadow:0 4px 14px #0004}
+#dfab{position:fixed;right:18px;bottom:calc(18px + var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px)));width:58px;height:58px;border-radius:18px;font-size:2rem;margin:0;padding:0;box-shadow:0 4px 14px #0004}
 .sheet{position:fixed;inset:0;background:#0007;display:flex;align-items:flex-end;justify-content:center;z-index:20}
 .sheet[hidden]{display:none}
-#ofabw,#dfw{position:sticky;bottom:calc(86px + env(safe-area-inset-bottom,0px));display:flex;justify-content:flex-end;pointer-events:none}
+#ofabw,#dfw{position:sticky;bottom:calc(86px + var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px)));display:flex;justify-content:flex-end;pointer-events:none}
 #ofab,#dadd{width:58px;height:58px;border-radius:50%;font-size:2rem;line-height:1;margin:0;padding:0;box-shadow:0 4px 14px #0004;pointer-events:auto}
-.box{background:var(--card);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.box{background:var(--card);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px)))}
 section[hidden]{display:none}
 </style>
 </head>
@@ -199,7 +199,7 @@ section[hidden]{display:none}
 <a class="mi" href="#info-tutorial"><span>▶️ কীভাবে ব্যবহার করবেন</span><span>›</span></a>
 <a class="mi" href="#info-privacy"><span>🔒 প্রাইভেসি পলিসি</span><span>›</span></a>
 </div>
-<div class="card mi" id="exit" style="background:#1565c0;color:#fff;border-color:#1565c0;font-weight:700;justify-content:center;font-size:1.05rem;padding:2px 0"><span>লগ আউট</span></div>
+<div class="card mi" id="exit" style="background:#1565c0;color:#fff;border-color:#1565c0;font-weight:700;justify-content:center;font-size:1.05rem;padding:2px 0"><span>বন্ধ করুন</span></div>
 <p class="mu" id="psm" style="text-align:center"></p>
 </section>
 
@@ -321,6 +321,8 @@ section[hidden]{display:none}
 <button id="bsave" type="button">সেভ করুন</button>
 <p class="mu" id="bmsg"></p>
 </div>
+
+<p class="mu" style="text-align:center;margin:16px 0 0;font-weight:600;color:var(--pr)">পরিকল্পিত বাজেট, সুন্দর ও নিশ্চিন্ত জীবন।</p>
 </section>
 
 <section id="s-debt">
@@ -583,12 +585,12 @@ applyTheme();
 loadOT();renderPlan();renderExp();renderSave();renderDebt();route();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
-<div id="slip" hidden style="position:fixed;inset:0;background:#fff;color:#111;z-index:40;overflow:auto"></div>
+<div id="slip" hidden style="position:fixed;inset:0;background:#fff;color:#111;z-index:40;overflow:auto;box-sizing:border-box;padding-top:var(--safe-area-inset-top,env(safe-area-inset-top,0px));padding-bottom:var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px))"></div>
 <style>@media print{body>*:not(#slip){display:none!important}#slip{position:static!important}.np{display:none}}#slip .mu{color:#555}#slip button{color:#fff;background:#0f7a5c}#slip button.g{color:#0f7a5c;background:transparent}#slip button#sp4{background:#c0392b;color:#fff;border:0}</style>
 <script>
 /* ===== নতুন ফিচার ===== */
 (()=>{
-const g=id=>document.getElementById(id),C=['🛒 বাজার','🛍️ কেনাকাটা','🍚 খাবার','🏠 বাড়ি ভাড়া','🚌 যাতায়াত','💊 ওষুধ','💡 বিল (বিদ্যুৎ/গ্যাস)','📱 মোবাইল রিচার্জ','🏦 DPS/সমিতি কিস্তি','📦 অন্যান্য'],PC=['#0f7a5c','#1e6fd9','#e08a00','#c0392b','#8e44ad','#16a2b8','#d35480','#7f8c8d','#5d9c2f','#a0522d'];
+const g=id=>document.getElementById(id),C=['🛒 বাজার','🛍️ কেনাকাটা','🍚 খাবার','🍱 টিফিন','🏠 বাড়ি ভাড়া','🚌 যাতায়াত','💊 ওষুধ','💡 বিল (বিদ্যুৎ/গ্যাস)','📱 মোবাইল রিচার্জ','🏦 DPS/সমিতি কিস্তি','📦 অন্যান্য'],PC=['#0f7a5c','#1e6fd9','#e08a00','#c0392b','#8e44ad','#16a2b8','#d35480','#7f8c8d','#5d9c2f','#a0522d','#e91e63'];
 ['ecat','rc'].forEach(i=>g(i).innerHTML=C.map(c=>`<option>${c}</option>`).join(''));
 T.rec='🔁 নিয়মিত খরচ';
 const gb=window.goBack;window.goBack=()=>location.hash==='#rec'?location.hash='expense':gb();
@@ -597,10 +599,10 @@ const cmp=(c,p,up,f=money)=>`<h2>গত মাসের সাথে তুল�
 /* খরচ: খাত + চার্ট */
 let n0=0;g('eadd').addEventListener('click',()=>{n0=S.exp.length},true);
 g('eadd').addEventListener('click',()=>{if(S.exp.length>n0){S.exp[S.exp.length-1].c=g('ecat').value;save();renderExp()}});
-function xe(){const mo=today.slice(0,7),ms=S.exp.filter(x=>x.d.startsWith(mo)),by={};ms.forEach(x=>{const k=x.c||C[9];by[k]=(by[k]||0)+x.a});
+function xe(){const mo=today.slice(0,7),ms=S.exp.filter(x=>x.d.startsWith(mo)),by={};ms.forEach(x=>{const k=x.c||C[C.length-1];by[k]=(by[k]||0)+x.a});
  const t=ms.reduce((s,x)=>s+x.a,0),en=Object.entries(by).sort((a,b)=>b[1]-a[1]);let a=0;
- const cg=en.map(([k,x],i)=>{const s=a;a+=x/t*100;return PC[i%10]+' '+s+'% '+a+'%'}).join(',');
- g('pie').innerHTML=t?`<div style="display:flex;gap:14px;align-items:center"><div style="width:110px;height:110px;border-radius:50%;flex:none;background:conic-gradient(${cg})"></div><div style="flex:1">${en.map(([k,x],i)=>`<div class="line"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${PC[i%10]};margin-right:6px"></i>${esc(k)}</span><b>${money(x)}</b></div>`).join('')}</div></div>`:'<p class="mu">এই মাসে কোনো খরচ নেই</p>';
+ const cg=en.map(([k,x],i)=>{const s=a;a+=x/t*100;return PC[i%PC.length]+' '+s+'% '+a+'%'}).join(',');
+ g('pie').innerHTML=t?`<div style="display:flex;gap:14px;align-items:center"><div style="width:110px;height:110px;border-radius:50%;flex:none;background:conic-gradient(${cg})"></div><div style="flex:1">${en.map(([k,x],i)=>`<div class="line"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${PC[i%PC.length]};margin-right:6px"></i>${esc(k)}</span><b>${money(x)}</b></div>`).join('')}</div></div>`:'<p class="mu">এই মাসে কোনো খরচ নেই</p>';
  g('xcmp').innerHTML=cmp(t,S.exp.filter(x=>x.d.startsWith(mkey(mo,-1))).reduce((s,x)=>s+x.a,0),false)}
 const re=renderExp;window.renderExp=()=>{re();xe();xr()};
 /* নিয়মিত খরচ */
@@ -637,7 +639,7 @@ function mkPdf(j,w,h){const E=new TextEncoder(),P=[],o=[];let n=0;const add=b=>{
  o[5]=n;s(`5 0 obj<</Length ${c.length}>>stream\n${c}\nendstream endobj\n`);const xr=n;
  s('xref\n0 6\n0000000000 65535 f \n'+[1,2,3,4,5].map(i=>String(o[i]).padStart(10,'0')+' 00000 n \n').join('')+`trailer<</Size 6/Root 1 0 R>>\nstartxref\n${xr}\n%%EOF`);return new Blob(P,{type:'application/pdf'})}
 const slipFile=(t)=>new Promise(r=>{const c=slipCv(),k=g('month').value;if(t==='png')c.toBlob(b=>r(new File([b],'বেতন-স্লিপ-'+k+'.png',{type:'image/png'})),'image/png');else{const d=atob(c.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i);r(new File([mkPdf(u,c.width,c.height)],'বেতন-স্লিপ-'+k+'.pdf',{type:'application/pdf'}))}});
-const slipSave=async t=>{const f=await slipFile(t),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();g('slipm').textContent='সংরক্ষণ করা হয়েছে। ফোনের Downloads ফোল্ডারে বা গ্যালারিতে দেখুন। ফাইল না পেলে "শেয়ার করুন" বাটন চাপুন।'};
+const slipSave=async t=>{const f=await slipFile(t),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();g('slipm').textContent='ডাউনলোড শুরু হয়েছে। ফাইল না পেলে "শেয়ার করুন" বাটন চাপুন।'};
 g('slipbtn').onclick=()=>{const c=slipCv();c.style.cssText='width:100%;border:1px solid #ddd;border-radius:8px';
  g('slip').innerHTML='<div style="max-width:520px;margin:auto;padding:14px"><div id="slipc"></div><div class="np" style="margin-top:12px"><button type="button" id="sp1">📄 PDF সংরক্ষণ</button><button type="button" class="g" id="sp2">🖼️ ছবি হিসেবে গ্যালারিতে সংরক্ষণ</button><button type="button" class="g" id="sp3">📤 শেয়ার করুন</button><button type="button" class="g" id="sp4">বন্ধ করুন</button><p class="mu" id="slipm"></p></div></div>';
  g('slipc').appendChild(c);g('sp1').onclick=()=>slipSave('pdf');g('sp2').onclick=()=>slipSave('png');g('sp4').onclick=()=>g('slip').hidden=true;
